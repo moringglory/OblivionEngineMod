@@ -1,0 +1,15 @@
+displayName: "Oblivion_Engine"
+
+name: "OblivionEngine"
+
+author: "awa"
+
+main: "oblivionengine.OblivionEngine"
+
+description: "[sky]Alpha OblivionEngine Ver:1.0.1"
+
+version: 1.0.1
+
+minGameVersion: 150
+
+java: true
