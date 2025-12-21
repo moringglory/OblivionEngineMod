@@ -64,7 +64,7 @@ public class OEIntelligentQuantumComputer extends Block {
                 }).size(100f, 40f);
                 dialog.buttons.button("DONE", () -> {
                     if(a.getText().equals("y")){
-                        text="BOOTING...";
+                        inf.setText("BOOTING...");
                     } else if(a.getText().equals("n")) {
                         dialog.hide();
                     }
