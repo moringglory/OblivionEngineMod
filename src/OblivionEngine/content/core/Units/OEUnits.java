@@ -73,7 +73,7 @@ public class OEUnits {
                 this.health = 22000.0F;
                 this.engineOffset = 38.0F;
                 this.engineSize = 7.3F;
-                this.hitSize = 580.0F;
+                this.hitSize = 20F;
                 this.armor = 13.0F;
                 this.targetFlags = new BlockFlag[]{BlockFlag.reactor, BlockFlag.battery, BlockFlag.core, null};
                 this.ammoType = new ItemAmmoType(Items.surgeAlloy);

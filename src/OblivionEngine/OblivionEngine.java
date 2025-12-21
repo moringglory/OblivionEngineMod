@@ -6,6 +6,7 @@ import OblivionEngine.content.OETechTree;
 import arc.Events;
 import arc.util.Time;
 import mindustry.game.EventType;
+import mindustry.gen.Icon;
 import mindustry.mod.Mod;
 import mindustry.ui.dialogs.BaseDialog;
 
@@ -15,14 +16,15 @@ import OblivionEngine.content.core.Units.OEUnits;
 import OblivionEngine.content.OEContent;
 
 public class OblivionEngine extends Mod {
-    public static final String MOD_NAME = "OblivionEngine";
+    public static final String MOD_NAME = "oblivion-engine";
     public OblivionEngine() {
         Events.on(EventType.ClientLoadEvent.class, e -> {
             Time.run(1f, () -> {
                 BaseDialog dialog = new BaseDialog("Mod 已加载");
-                dialog.cont.image(Core.atlas.find("OblivionEngine-boot")).pad(20f).row();
-                dialog.cont.add("Oblivion Engine 模组已成功加载！");
-                Time.run(100f, dialog::addCloseButton);
+                dialog.cont.image(Core.atlas.find("oblivion-engine-boot")).pad(20f).row();
+                dialog.cont.add("OblivionEngine 模组已成功加载！");
+                dialog.buttons.button("goon",()->{dialog.hide();}).size(100f,50f);
+//                Time.run(100f, dialog::addCloseButton);
                 dialog.show();
             });
         });

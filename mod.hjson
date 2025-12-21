@@ -1,8 +1,8 @@
-displayName: "Oblivion_Engine"
+displayName: "OblivionEngine"
 
-name: "OblivionEngine"
+name: "oblivion-engine"
 
-author: "awa"
+author: "Shiraelle"
 
 main: "OblivionEngine.OblivionEngine"
 
