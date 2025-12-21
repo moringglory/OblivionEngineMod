@@ -39,7 +39,7 @@ public class OEUnits {
                 researchCostMultiplier = 0.5f;
                 drawSoftShadow = false;
                 autoFindTarget = false;
-                useUnitCap = true;
+                useUnitCap = false;
                 logicControllable = false;
                 playerControllable = false;
                 controlSelectGlobal = false;

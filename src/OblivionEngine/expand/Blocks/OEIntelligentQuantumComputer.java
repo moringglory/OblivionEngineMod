@@ -4,11 +4,15 @@ import OblivionEngine.content.OEColor;
 import arc.graphics.Color;
 import arc.scene.ui.TextArea;
 import arc.scene.ui.layout.Table;
+import arc.util.Time;
 import mindustry.gen.*;
+import mindustry.gen.Icon;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
 import mindustry.world.*;
 import mindustry.world.blocks.logic.MessageBlock;
+
+import javax.swing.*;
 
 import static mindustry.Vars.state;
 
@@ -29,7 +33,7 @@ public class OEIntelligentQuantumComputer extends Block {
     }
 
     public class Booting extends Building {
-        String text="Please select :\n   Do you want to start 980D?(y/n)\n    ";
+        String text="Please select :\n   Do you want to start 980D?(y/n)\n";
         public StringBuilder message = new StringBuilder();
         int time = 0;
         @Override
@@ -38,9 +42,9 @@ public class OEIntelligentQuantumComputer extends Block {
                 BaseDialog dialog = new BaseDialog("INFORMATION");
                 dialog.setFillParent(false);
                 dialog.cont.row();
-                TextArea inf = dialog.cont.add(new TextArea(text)).size(768f, 65f).get();
+                TextArea a = dialog.cont.add(new TextArea(message.toString().replace("\r", "\n"))).size(768f, 75f).get();
                 dialog.cont.row();
-                TextArea a = dialog.cont.add(new TextArea(message.toString().replace("\r", "\n"))).size(768f, 432f).get();
+                TextArea inf = dialog.cont.add(new TextArea(text)).size(768f, 432f).get();
                 a.setFilter((textField, c) -> {
                     if(c == '\n'){
                         int count = 0;
@@ -63,11 +67,26 @@ public class OEIntelligentQuantumComputer extends Block {
                     dialog.hide();
                 }).size(100f, 40f);
                 dialog.buttons.button("DONE", () -> {
-                    if(a.getText().equals("y")){
-                        inf.setText("BOOTING...");
-                    } else if(a.getText().equals("n")) {
+                    String n=a.getText();
+                    if(n.equals("Y")||n.equals("y")||n.equals("y\n")||n.equals("Y\n")){
+                        inf.setColor(Color.blue.g(150).r(150));
+                        for(float i=30f;i<=570f;i+=30f){
+                            StringBuilder str= new StringBuilder();
+                            for(int j=0;j<=i/20-3;j++) str.append("|");
+                            for(int j=0;j<=20-i/30-1;j++) str.append(" ");
+                            String finalStr = str.toString();
+                            Time.run(i,()->inf.setText("BOOTING...\n[ "+ finalStr +" ]"));
+                        }
+                        Time.run(620f, ()->inf.setColor(Color.white.b(150)));
+                        Time.run(620f, ()->inf.setText("BOOTING...\n[ |||||||||||||||||||||||||||| ]\nSUCCESS!"));
+//                        Time.run(680f, dialog::hide);
+                    } else if(n.equals("n")||n.equals("N")||n.equals("n\n")||n.equals("N\n")) {
                         dialog.hide();
+                    } else {
+                        inf.setText(text+"Please select");
+                        inf.setColor(Color.red);
                     }
+                    a.setText("");
                 }).size(100f, 40f);
                 dialog.update(() -> {
                     if(tile.build != this){
