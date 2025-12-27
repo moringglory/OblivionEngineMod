@@ -26,6 +26,7 @@ public class OblivionEngine extends Mod {
                 dialog.buttons.button("goon",()->{dialog.hide();}).size(100f,50f);
 //                Time.run(100f, dialog::addCloseButton);
                 dialog.show();
+                dialog.closeOnBack();
             });
         });
     }
