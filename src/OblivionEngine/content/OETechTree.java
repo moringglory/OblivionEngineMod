@@ -1,7 +1,7 @@
 package OblivionEngine.content;
 
-import OblivionEngine.content.core.Blcoks.OEBlock;
-import OblivionEngine.content.core.Items.OEItems;
+import OblivionEngine.content.core.OEBlock;
+import OblivionEngine.content.core.OEItems;
 import arc.struct.Seq;
 import mindustry.content.*;
 import mindustry.content.TechTree.TechNode;

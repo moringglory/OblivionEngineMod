@@ -6,13 +6,12 @@ import OblivionEngine.content.OETechTree;
 import arc.Events;
 import arc.util.Time;
 import mindustry.game.EventType;
-import mindustry.gen.Icon;
 import mindustry.mod.Mod;
 import mindustry.ui.dialogs.BaseDialog;
 
-import OblivionEngine.content.core.Items.OEItems;
-import OblivionEngine.content.core.Blcoks.OEBlock;
-import OblivionEngine.content.core.Units.OEUnits;
+import OblivionEngine.content.core.OEItems;
+import OblivionEngine.content.core.OEBlock;
+import OblivionEngine.content.core.OEUnits;
 import OblivionEngine.content.OEContent;
 
 public class OblivionEngine extends Mod {
