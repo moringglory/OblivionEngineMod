@@ -11,7 +11,9 @@ import mindustry.entities.part.ShapePart;
 import mindustry.graphics.Layer;
 import mindustry.type.ItemStack;
 import mindustry.type.UnitType;
+import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.environment.OreBlock;
+import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 import OblivionEngine.content.OEFx;
@@ -24,8 +26,7 @@ import mindustry.gen.Sounds;
 import mindustry.type.Category;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
-import mindustry.world.draw.DrawBlock;
-import mindustry.world.draw.DrawTurret;
+import mindustry.world.draw.*;
 import mindustry.world.meta.BuildVisibility;
 import OblivionEngine.expand.Blocks.OEIntelligentQuantumComputer;
 
@@ -74,6 +75,36 @@ public class OEBlock {
                     moveY = -3f;
                     progress = PartProgress.recoil;
                 }});
+                parts.addAll(
+                        new ShapePart(){{
+//                            progress = circleProgress;
+                            color = Color.blue;
+                            circle = true;
+                            hollow = true;
+                            stroke = 0f;
+                            strokeTo = 4f;
+                            radius = 5f;
+                            layer = Layer.effect;
+                            y =12;
+                            x = 11;
+                        }},
+                        new HaloPart(){{
+//                            progress = circleProgress;
+                            color = Color.blue;
+                            tri = true;
+                            shapes = 3;
+                            triLength = 0f;
+                            triLengthTo = 5f;
+                            radius = 6f;
+                            haloRadius = 11f;
+                            haloRotateSpeed = 9f;
+                            shapeRotation = 180f;
+                            haloRotation = 180f;
+                            layer = Layer.effect;
+                            y = 1;
+                            x = 12;
+                        }}
+                );
             }};
             ammo(
                     Items.surgeAlloy, new PointBulletType() {{
@@ -126,7 +157,7 @@ public class OEBlock {
             hasPower = true;
             consumePower(2.5f);
             size = 3;
-            drawer = new DrawTurret("reinforced-"){{
+            drawer = new DrawTurret(){{
                 parts.addAll(
                         new ShapePart(){{
                             color = OEColor.powerArea;

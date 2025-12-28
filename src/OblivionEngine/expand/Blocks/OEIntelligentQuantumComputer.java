@@ -2,18 +2,25 @@ package OblivionEngine.expand.Blocks;
 
 import OblivionEngine.content.OEColor;
 import arc.Core;
+import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
-import arc.scene.ui.Label;
+import arc.math.Angles;
+import arc.math.Interp;
+import arc.math.Mathf;
 import arc.scene.ui.TextArea;
 import arc.scene.ui.TextField;
 import arc.scene.ui.layout.Table;
 import arc.struct.EnumSet;
 import arc.util.Time;
-import mindustry.Vars;
+import arc.util.Tmp;
+import mindustry.content.Blocks;
 import mindustry.gen.*;
 import mindustry.gen.Icon;
+import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
+import mindustry.graphics.Pal;
+import mindustry.graphics.Shaders;
 import mindustry.ui.Fonts;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
@@ -49,69 +56,11 @@ public class OEIntelligentQuantumComputer extends Block {
     }
 
     public class Booting extends Building {
-        float a = 0;
         String text="Please select :\n\n   Do you want to start 980D?(y/n)\n";
-        public StringBuilder message = new StringBuilder();
-        int time = 0;
+        boolean boot_ = false;
+        int boottime,time = 0;
         @Override
         public void buildConfiguration(Table table) {
-//            table.button(Icon.fileText, Styles.cleari, () -> {
-//                BaseDialog dialog = new BaseDialog("INFORMATION");
-//                dialog.setFillParent(false);
-//
-//                // 创建自定义样式的矩形背景
-//                Table contentTable = new Table();
-//
-//                // 添加标题栏
-//                contentTable.rect((x, y, width, height) -> {
-//                    Draw.color(Color.cyan);
-//                    Fill.rect(x, y, width, height);
-//                    Draw.color(Color.white);
-//
-//                    // 添加边框
-//                    Draw.color(Color.blue);
-//                    Lines.stroke(2f);
-//                    Lines.rect(x + 1, y + 1, width - 2, height - 2);
-//                }).height(50f).width(768f);
-//
-//                contentTable.add(new Label("QUANTUM COMPUTER 980D")).center().expandX();
-//
-//                // 添加信息区域
-//                contentTable.row();
-//                contentTable.rect((x, y, width, height) -> {
-//                    Draw.color(OEColor.ancientLight);
-//                    Fill.rect(x, y, width, height);
-//                    Draw.color(Color.cyan);
-//                    Lines.stroke(1f);
-//                    Lines.rect(x + 2, y + 2, width - 4, height - 4);
-//                }).height(200f).width(768f);
-//
-//                contentTable.add(new Label("System Information")).center().expandX().pad(10f);
-//
-//                // 添加按钮区域
-//                contentTable.row();
-//                contentTable.rect((x, y, width, height) -> {
-//                    Draw.color(OEColor.powerArea);
-//                    Fill.rect(x, y, width, height);
-//                    Draw.color(OEColor.highwhite);
-//                    Lines.stroke(1f);
-//                    Lines.rect(x + 1, y + 1, width - 2, height - 2);
-//                }).height(80f).width(768f);
-//
-//                // 添加按钮
-//                Table buttonTable = new Table();
-//                buttonTable.defaults().size(100f, 40f).pad(10f);
-//                buttonTable.button("START", () -> {
-//                    // 启动逻辑
-//                });
-//                buttonTable.button("CANCEL", () -> dialog.hide());
-//
-//                contentTable.add(buttonTable).center();
-//
-//                dialog.cont.add(contentTable);
-//                dialog.show();
-//
-//            }).size(40f);
             table.button(Icon.fileText, Styles.cleari, () -> {
                 TextField.TextFieldStyle IQCStyle = new TextField.TextFieldStyle();
                 IQCStyle.font = Fonts.def;
@@ -146,7 +95,7 @@ public class OEIntelligentQuantumComputer extends Block {
                                 dialog.hide();
 
                                 //开始启动
-                                draw();
+                                boot_=true;
                             });
                         });
                     });
@@ -163,18 +112,57 @@ public class OEIntelligentQuantumComputer extends Block {
 //                dialog.closeOnBack();
             }).size(40f);
         }
+//        @Override
+//        public void draw(){
+//            super.draw();
+//
+//            float x = tile.drawx();
+//            float y = tile.drawy();
+//            float size = tilesize * 4f;
+//            Draw.z(Layer.block + 0.1f);
+//            Draw.color(Color.cyan);
+//            Lines.stroke(1f);
+//            Lines.rect(x-16,y-16,size,size);
+//
+//        }
+//        @Override
+//        public void draw(){
+//            super.draw();
+//
+//            if(boot_==true){
+//                float rad = size * tilesize / 2f * 0.74f;
+//
+//                Draw.z(Layer.bullet - 0.0001f);
+//                Lines.stroke(1.75f, Pal.accent);
+//                Lines.square(x, y, rad,122f);
+//                Draw.color(team.color);
+//                Lines.square(x, y, rad+100,122f);
+//            } else {
+//
+//            }
+//        }
         @Override
-        public void draw(){
+        public void draw() {
             super.draw();
 
-            float x = tile.drawx();
-            float y = tile.drawy();
-            float size = tilesize * 4f;
-            Draw.z(Layer.block + 0.1f);
-            Draw.color(Color.cyan);
-            Lines.stroke(1f);
-            Lines.rect(x-20,y-20,size,size);
+            if (boot_==true) { // ✅ 修正：使用 boot == true 或更推荐的 boot
+                float rad = size * tilesize / 2f * 0.74f;
 
+                Draw.z(Layer.bullet - 0.0001f);
+
+                // 第一个正方形：外圈，颜色为 Pal.accent，带旋转动画
+                Lines.stroke(5.5f, Pal.accent);
+                float rotation1 = Time.time * 2f; // 每秒旋转 30 度
+                Lines.square(x, y, rad, rotation1); // 旋转角度是 rotation1
+
+                // 第二个正方形：内圈或主体，颜色为 team.color，也带旋转（可以不同速度）
+                Draw.color(team.color);
+                float rotation2 = Time.time * 1f; // 每秒旋转 20 度，可以与上面不同
+                Lines.square(x, y, rad + 100, rotation2); // 旋转角度是 rotation2
+                Lines.square(x, y, rad + 100, rotation2*-1);
+            } else {
+                // boot 为 false 时，什么都不绘制，或者绘制默认状态
+            }
         }
         @Override
         public boolean onConfigureBuildTapped(Building other) {
