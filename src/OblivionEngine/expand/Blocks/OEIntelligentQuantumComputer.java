@@ -1,26 +1,19 @@
 package OblivionEngine.expand.Blocks;
 
+import OblivionEngine.content.DrawBlock;
 import OblivionEngine.content.OEColor;
 import arc.Core;
-import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
-import arc.math.Angles;
-import arc.math.Interp;
-import arc.math.Mathf;
 import arc.scene.ui.TextArea;
 import arc.scene.ui.TextField;
 import arc.scene.ui.layout.Table;
 import arc.struct.EnumSet;
 import arc.util.Time;
-import arc.util.Tmp;
-import mindustry.content.Blocks;
 import mindustry.gen.*;
 import mindustry.gen.Icon;
-import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
-import mindustry.graphics.Shaders;
 import mindustry.ui.Fonts;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
@@ -145,7 +138,7 @@ public class OEIntelligentQuantumComputer extends Block {
         public void draw() {
             super.draw();
 
-            if (boot_==true) { // ✅ 修正：使用 boot == true 或更推荐的 boot
+            if (boot_==true) {
                 float rad = size * tilesize / 2f * 0.74f;
 
                 Draw.z(Layer.bullet - 0.0001f);
@@ -162,6 +155,7 @@ public class OEIntelligentQuantumComputer extends Block {
                 Lines.square(x, y, rad + 100, rotation2*-1);
             } else {
                 // boot 为 false 时，什么都不绘制，或者绘制默认状态
+                
             }
         }
         @Override

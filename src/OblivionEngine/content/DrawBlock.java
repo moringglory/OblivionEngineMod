@@ -9,7 +9,6 @@ import arc.util.Nullable;
 import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.entities.part.DrawPart;
-import mindustry.gen.Building;
 
 public class DrawBlock extends DrawPart {
     public boolean circle = false, hollow = false;

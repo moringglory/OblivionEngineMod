@@ -1,8 +1,8 @@
 package OblivionEngine.content.core;
 
-import OblivionEngine.content.OEColor;
+import OblivionEngine.expand.Blocks.OEExcavator;
+import OblivionEngine.expand.Payload.OEPayloadBlock;
 import arc.graphics.Color;
-import arc.math.Mathf;
 import arc.struct.Seq;
 import arc.util.Nullable;
 import mindustry.content.*;
@@ -11,9 +11,8 @@ import mindustry.entities.part.ShapePart;
 import mindustry.graphics.Layer;
 import mindustry.type.ItemStack;
 import mindustry.type.UnitType;
-import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.environment.OreBlock;
-import mindustry.world.blocks.production.GenericCrafter;
+import mindustry.world.blocks.payloads.Constructor;
 import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 import OblivionEngine.content.OEFx;
@@ -37,11 +36,13 @@ public class OEBlock {
             //炮台
             precursor,
             //工厂
-            rockcrusher,centrifuge,
+            rockcrusher,centrifuge,excavator,
             //矿石
             UraniumOre,
             //智能量子计算机
-            IQC_980D,ICQ_380D;
+            IQC_980D,ICQ_380D,
+            //载荷产物(方块实现方法)
+            stone_materiala;
     public static DrawBlock drawer = new DrawTurret();
     public static @Nullable ItemStack outputItem;
     public static void load(){
@@ -122,6 +123,13 @@ public class OEBlock {
                     }}
             );
         }};
+        stone_materiala = new OEPayloadBlock("stone_materiala"){{
+            requirements(Category.units, BuildVisibility.hidden,with(Items.titanium, 150));
+            size = 3;
+            health = 512 * size;//血量
+            alwaysUnlocked=false;//默认解锁
+        }};
+
         rockcrusher = new UnitFactory("rockcrusher"){{
             requirements(Category.units, with(Items.copper, 50, Items.lead, 120, Items.silicon, 80));
             plans = Seq.with(
@@ -147,46 +155,24 @@ public class OEBlock {
                     new UnitType[]{OEUnits.depleted_uranium, OEUnits.ingot}
             );
         }};
-        UraniumOre = new OreBlock(OEItems.Uranium){{
-            oreDefault = true;
-            oreThreshold = 0.882f;
-            oreScale = 26.680953f;
-        }};
         IQC_980D = new OEIntelligentQuantumComputer("IntelligentQuantumComputer_980D"){{
             requirements(Category.logic, with(Items.silicon, 50, Items.beryllium, 75, Items.tungsten, 40));
             hasPower = true;
             consumePower(2.5f);
             size = 3;
-            drawer = new DrawTurret(){{
-                parts.addAll(
-                        new ShapePart(){{
-                            color = OEColor.powerArea;
-                            sides = 4;
-                            hollow = true;
-                            stroke = 0f;
-                            strokeTo = 2f;
-                            radius = 3f;
-                            layer = Layer.effect;
-                            y = 32f;
-                            x = 32f;
-                        }},
-                        new HaloPart(){{
-                            color = OEColor.powerArea;
-                            tri = true;
-                            shapes = 3;
-                            triLength = 0f;
-                            triLengthTo = 5f;
-                            radius = 6f;
-                            haloRadius = 64;
-                            haloRotateSpeed = 20f;
-                            shapeRotation = 180f;
-                            haloRotation = 180f;
-                            layer = Layer.effect;
-                            y = 32f;
-                            x = 32f;
-                        }}
-                );
-            }};
+        }};
+        UraniumOre = new OreBlock(OEItems.Uranium){{
+            oreDefault = true;
+            oreThreshold = 0.882f;
+            oreScale = 26.680953f;
+        }};
+        excavator = new Constructor("excavator"){{
+            requirements(Category.units,with(Items.titanium, 150));
+            size = 16;
+            maxBlockSize = 9;
+            minBlockSize = 1;
+            health = 480*size;
+            filter = Seq.with(stone_materiala,IQC_980D);
         }};
     }
 }

@@ -17,13 +17,9 @@ import mindustry.world.meta.BlockFlag;
 
 public class OEUnits {
     public static UnitType awa;
-    //public static OEPayloadItems qwq;
-    public static UnitType depleted_uranium,ingot;
+    public static UnitType ingot,depleted_uranium;
 
     public static void load(){
-//        qwq = new OEPayloadItems() {
-//
-//        };
         depleted_uranium = new UnitType("depleted_uranium") {
             {
                 health = 1f;

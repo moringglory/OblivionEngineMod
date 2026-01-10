@@ -1,5 +1,6 @@
 package OblivionEngine.content;
 
+import OblivionEngine.expand.map.OEGenerator;
 import arc.func.Prov;
 import arc.graphics.Color;
 import arc.util.Time;
@@ -20,7 +21,7 @@ public class OEPlanets {
     public static void load(){
         vjsx = new Planet("vjsx", Planets.serpulo,1f,2){{
             this.iconColor = Color.valueOf("3299cc");
-            this.generator = new SerpuloPlanetGenerator();
+            this.generator = new OEGenerator();
             this.meshLoader = new Prov<>() {
                 @Override
                 public GenericMesh get() {
