@@ -93,7 +93,7 @@ jar{
             include "${project.archivesBaseName}Desktop.jar"
         }
         exec {
-            commandLine 'javaw', '-jar','"D:/Games/Mindustry/154/Desktop.jar"'
+            commandLine 'javaw', '-jar','"C:/Users/user/Desktop/152desktop.jar"'
         }
     }
 }
