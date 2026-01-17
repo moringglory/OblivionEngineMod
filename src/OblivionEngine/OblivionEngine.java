@@ -1,5 +1,6 @@
 package OblivionEngine;
 
+import OblivionEngine.content.core.OEEffect;
 import arc.Core;
 import OblivionEngine.content.OEPlanets;
 import OblivionEngine.content.OETechTree;
@@ -40,6 +41,7 @@ public class OblivionEngine extends Mod {
         OEItems.load();
         OEUnits.load();
         OEBlock.load();
+        OEEffect.load();
         OEPlanets.load();
         OETechTree.load();
     }

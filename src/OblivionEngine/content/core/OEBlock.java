@@ -166,13 +166,13 @@ public class OEBlock {
             oreThreshold = 0.882f;
             oreScale = 26.680953f;
         }};
-        excavator = new Constructor("excavator"){{
+        excavator = new OEExcavator("excavator"){{
             requirements(Category.units,with(Items.titanium, 150));
             size = 16;
-            maxBlockSize = 9;
-            minBlockSize = 1;
+//            maxBlockSize = 9;
+//            minBlockSize = 1;
             health = 480*size;
-            filter = Seq.with(stone_materiala,IQC_980D);
+//            Seq.with(stone_materiala,IQC_980D);
         }};
     }
 }

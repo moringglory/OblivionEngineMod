@@ -82,6 +82,20 @@ jar{
     from("assets/"){
         include "**"
     }
+    doLast {
+        delete{
+            delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}Desktop.jar"
+            delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}Desktop.zip"
+        }
+        copy {
+            from "$buildDir/libs"
+            into "C:/Users/user/AppData/Roaming/Mindustry/mods"
+            include "${project.archivesBaseName}Desktop.jar"
+        }
+        exec {
+            commandLine 'javaw', '-jar','"D:/Games/Mindustry/154/Desktop.jar"'
+        }
+    }
 }
 
 task deploy(type: Jar){
@@ -96,5 +110,9 @@ task deploy(type: Jar){
             delete "$buildDir/libs/${project.archivesBaseName}Desktop.jar"
             delete "$buildDir/libs/${project.archivesBaseName}Android.jar"
         }
+
+
+
     }
 }
+
