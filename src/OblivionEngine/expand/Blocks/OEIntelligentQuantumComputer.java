@@ -1,6 +1,6 @@
 package OblivionEngine.expand.Blocks;
 
-import OblivionEngine.content.DrawBlock;
+import OblivionEngine.content.OEDrawBlock;
 import OblivionEngine.content.OEColor;
 import arc.Core;
 import arc.graphics.Color;
@@ -153,6 +153,18 @@ public class OEIntelligentQuantumComputer extends Block {
                 float rotation2 = Time.time * 1f; // 每秒旋转 20 度，可以与上面不同
                 Lines.square(x, y, rad + 100, rotation2); // 旋转角度是 rotation2
                 Lines.square(x, y, rad + 100, rotation2*-1);
+                OEDrawBlock.parts.addAll(
+                new OEDrawBlock(){{
+                    color = Color.blue;
+                    circle = true;
+                    hollow = true;
+                    stroke = 0f;
+                    strokeTo = 4f;
+                    radius = 5f;
+                    layer = Layer.effect;
+                    y =12;
+                    x = 11;
+                }});
             } else {
                 // boot 为 false 时，什么都不绘制，或者绘制默认状态
                 

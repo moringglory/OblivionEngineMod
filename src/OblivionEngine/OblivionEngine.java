@@ -1,6 +1,6 @@
 package OblivionEngine;
 
-import OblivionEngine.content.core.OEEffect;
+import OblivionEngine.content.core.OEStatusEffects;
 import arc.Core;
 import OblivionEngine.content.OEPlanets;
 import OblivionEngine.content.OETechTree;
@@ -22,7 +22,7 @@ public class OblivionEngine extends Mod {
             Time.run(1f, () -> {
                 BaseDialog dialog = new BaseDialog("Mod 已加载");
                 dialog.cont.image(Core.atlas.find("oblivion-engine-boot")).pad(20f).row();
-                dialog.cont.add("OblivionEngine 模组已成功加载！");
+                dialog.cont.add("OblivionEngine 模组已成功加载！awa");
                 dialog.buttons.button("goon",()->{dialog.hide();}).size(100f,50f);
 //                Time.run(100f, dialog::addCloseButton);
                 dialog.show();
@@ -37,11 +37,11 @@ public class OblivionEngine extends Mod {
 
     @Override
     public void loadContent() {
+        OEStatusEffects.load();
         OEContent.load();
         OEItems.load();
         OEUnits.load();
         OEBlock.load();
-        OEEffect.load();
         OEPlanets.load();
         OETechTree.load();
     }

@@ -5,12 +5,14 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
+import arc.struct.Seq;
 import arc.util.Nullable;
 import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.entities.part.DrawPart;
 
-public class DrawBlock extends DrawPart {
+public class OEDrawBlock extends DrawPart {
+    public static Seq<DrawPart> parts = new Seq<>();
     public boolean circle = false, hollow = false;
     public int sides = 3;
     public float radius = 3f, radiusTo = -1f, stroke = 1f, strokeTo = -1f;

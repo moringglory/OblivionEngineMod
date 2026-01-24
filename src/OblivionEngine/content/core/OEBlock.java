@@ -124,7 +124,7 @@ public class OEBlock {
             );
         }};
         stone_materiala = new OEPayloadBlock("stone_materiala"){{
-            requirements(Category.units, BuildVisibility.hidden,with(Items.titanium, 150));
+            requirements(Category.units, BuildVisibility.editorOnly,with(Items.titanium, 150));
             size = 3;
             health = 512 * size;//血量
             alwaysUnlocked=false;//默认解锁
@@ -173,6 +173,13 @@ public class OEBlock {
 //            minBlockSize = 1;
             health = 480*size;
 //            Seq.with(stone_materiala,IQC_980D);
+            requirements(Category.units, with(Items.titanium, 150));
+            size = 16;
+            health = 480 * size;
+            hasPower = true;
+            consumePower(512 / 60f);
+            consumeCoolant(0.2f);
+            buildTime = 600f;
         }};
     }
 }
