@@ -22,19 +22,14 @@ public class OEPlanets {
         vjsx = new Planet("vjsx", Planets.serpulo,1f,2){{
             this.iconColor = Color.valueOf("3299cc");
             this.generator = new OEGenerator();
-            this.meshLoader = new Prov<>() {
-                @Override
-                public GenericMesh get() {
-                    return new HexMesh(vjsx,6);
-                }
-            };
+            meshLoader = () -> new HexMesh(this, 6);
             this.cloudMeshLoader = () -> new MultiMesh(
                     new HexSkyMesh(this,9,1.2F,0.24F,4,new Color().set(Pal.spore).mul(0.9f).a(0.75f),2,0.3F,0.7F, 0.43F),
                     new HexSkyMesh(this,3,3.7F,0.16F,6, Color.valueOf("a4b7fa").a(0.65F),6,0.45F,0.86F, 0.45F),
                     //new HexSkyMesh(this,3,0.01F,0.05F,5, Color.valueOf("ed7459"),2,0.5F,0.1F, 0.2F)
-//                    new DysonRingMesh(this, 2.300f, 0.28f, 729, Pal.darkMetal, Pal.darkerMetal),
-//                    new DysonRingMesh(this, 2.500f, 0.28f, 2941, Pal.darkMetal, Pal.darkerMetal),
-//                    new DysonRingMesh(this, 2.700f, 0.28f, 3834, Pal.darkMetal, Pal.darkerMetal),
+                    new DysonRingMesh(this, 2.300f, 0.28f, 729, Pal.darkMetal, Pal.darkerMetal),
+                    new DysonRingMesh(this, 2.500f, 0.28f, 2941, Pal.darkMetal, Pal.darkerMetal),
+                    new DysonRingMesh(this, 2.700f, 0.28f, 3834, Pal.darkMetal, Pal.darkerMetal),
                     new DysonRingMesh(this, 2.305f, 0.19f, 729,OEColor.darkEnrColor,OEColor.darkEnrColor),
                     new DysonRingMesh(this, 2.505f, 0.19f, 2941,OEColor.darkEnrColor,OEColor.darkEnrColor),
                     new DysonRingMesh(this, 2.705f, 0.19f, 3834,OEColor.darkEnrColor,OEColor.darkEnrColor)
@@ -62,7 +57,7 @@ public class OEPlanets {
             landCloudColor = atmosphereColor = Color.valueOf("3299cc");//00baff
         }};
         ymzq = new Planet("ymzq", Planets.sun,3.0f,2){{
-            alwaysUnlocked = true;
+            alwaysUnlocked = false;
         }};
     }
 }
