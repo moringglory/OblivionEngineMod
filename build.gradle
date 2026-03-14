@@ -2,7 +2,24 @@ apply plugin: "java"
 
 version '1.0'
 
-sourceSets.main.java.srcDirs = ["src"]
+//sourceSets.main.java.srcDirs = ["src"]
+sourceSets {
+    main {
+        java {
+            // 只包含你想要编译的目录，自动排除其他目录
+            srcDirs = ['src']  // 只编译这个目录
+
+            // 或者明确排除特定包
+            exclude 'others'  // 排除整个disintegration包
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src']
+            exclude 'others'  // 也排除测试中的disintegration
+        }
+    }
+}
 
 repositories{
     mavenCentral()
@@ -36,6 +53,7 @@ dependencies{
     compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
 
     annotationProcessor "com.github.Anuken:jabel:$jabelVersion"
+
 }
 
 //force arc version
@@ -69,6 +87,7 @@ task jarAndroid{
 }
 
 jar{
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE // 或者 EXCLUDE / WARN / FAIL
     archiveFileName = "${base.archivesBaseName}Desktop.jar"
 
     from{

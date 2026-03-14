@@ -1,15 +1,14 @@
 package OblivionEngine.content;
 
 import arc.graphics.Color;
-import mindustry.content.Items;
 import mindustry.graphics.Pal;
 
 public class OEColor {
     public static Color
-            highwhite = new Color(255, 255, 255),
-            ancient = Pal.sapBullet.cpy().mul(1.075f).lerp(Color.white, 0.075f),
-            ancientLight = Items.surgeAlloy.color.cpy().lerp(Pal.accent, 0.115f),
-            ancientLight1 = ancient.cpy().lerp(Color.white, 0.7f),
-            powerArea = Pal.power.cpy().a(0.5f),
-            darkEnrColor = Items.surgeAlloy.color.cpy().lerp(Pal.accent, 0.115f).a(0.4F);
+        highwhite = new Color(255, 255, 255),
+        lightDinoflagellates = Pal.lancerLaser,//甲藻
+        darkDinoflagellates = Pal.lancerLaser,//甲藻
+        CarbonParticles = new Color(150,110,70),//碳粒子
+        SiAlONPhosphor = Pal.lighterOrange,//碱土金属氧氮化铝硅酸盐荧光体
+        darkSpaceMetal = new Color(0, 123, 198);
 }

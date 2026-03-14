@@ -5,6 +5,7 @@ name: "oblivion-engine"
 author: "Shiraelle"
 
 main: "OblivionEngine.OblivionEngine"
+#main: "others.disintegration.DisintegrationJavaMod"
 
 description: "[sky]Alpha OblivionEngine Ver:1.0.1"
 

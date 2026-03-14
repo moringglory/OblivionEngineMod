@@ -1,6 +1,6 @@
 package OblivionEngine.expand.Blocks;
 
-import OblivionEngine.content.core.OEBlock;
+import OblivionEngine.content.core.OEBlocks;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
@@ -18,7 +18,7 @@ import mindustry.world.blocks.payloads.PayloadBlock;
 
 public class OEExcavator extends PayloadBlock {
 
-    private final Block POLY_TYPE = OEBlock.stone_materiala;//Vars.content.getByName(ContentType.block, "stone_materiala");
+    private final Block POLY_TYPE = OEBlocks.stone_materiala;//Vars.content.getByName(ContentType.block, "stone_materiala");
 
     public OEExcavator(String name){
         super(name);

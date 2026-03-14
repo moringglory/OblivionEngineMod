@@ -12,7 +12,6 @@ import mindustry.graphics.Layer;
 import mindustry.type.ItemStack;
 import mindustry.type.UnitType;
 import mindustry.world.blocks.environment.OreBlock;
-import mindustry.world.blocks.payloads.Constructor;
 import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 import OblivionEngine.content.OEFx;
@@ -31,7 +30,7 @@ import OblivionEngine.expand.Blocks.OEIntelligentQuantumComputer;
 
 import static mindustry.type.ItemStack.with;
 
-public class OEBlock {
+public class OEBlocks {
     public static Block
             //炮台
             precursor,
@@ -43,7 +42,6 @@ public class OEBlock {
             IQC_980D,ICQ_380D,
             //载荷产物(方块实现方法)
             stone_materiala;
-    public static DrawBlock drawer = new DrawTurret();
     public static @Nullable ItemStack outputItem;
     public static void load(){
         precursor=new ItemTurret("precursor"){{
@@ -152,7 +150,7 @@ public class OEBlock {
             constructTime = 60f * 10f;
 
             upgrades.addAll(
-                    new UnitType[]{OEUnits.depleted_uranium, OEUnits.ingot}
+                    new UnitType[]{OEUnits.depleted_uranium}
             );
         }};
         IQC_980D = new OEIntelligentQuantumComputer("IntelligentQuantumComputer_980D"){{
@@ -160,6 +158,7 @@ public class OEBlock {
             hasPower = true;
             consumePower(2.5f);
             size = 3;
+            alwaysUnlocked = false;
         }};
         UraniumOre = new OreBlock(OEItems.Uranium){{
             oreDefault = true;
