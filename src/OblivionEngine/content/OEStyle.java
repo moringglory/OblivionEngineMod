@@ -3,6 +3,7 @@ package OblivionEngine.content;
 import arc.graphics.Color;
 import arc.scene.style.Drawable;
 import arc.scene.ui.Dialog;
+import arc.scene.ui.TextArea;
 import arc.scene.ui.TextField;
 import mindustry.ui.Fonts;
 import mindustry.ui.Styles;
