@@ -1,5 +1,8 @@
 package OblivionEngine.expand.ui;
 
+import OblivionEngine.content.OEColor;
+import OblivionEngine.content.OENoise;
+import OblivionEngine.content.OEStyle;
 import arc.ApplicationListener;
 import arc.Core;
 import arc.Events;
@@ -16,51 +19,50 @@ import arc.scene.event.ElementGestureListener;
 import arc.scene.event.InputEvent;
 import arc.scene.event.InputListener;
 import arc.scene.event.Touchable;
-import arc.scene.ui.Dialog;
-import arc.scene.ui.Image;
-import arc.scene.ui.ImageButton;
-import arc.scene.ui.Label;
-import arc.scene.ui.layout.Stack;
+import arc.scene.ui.*;
 import arc.scene.ui.layout.Table;
+import arc.scene.ui.layout.WidgetGroup;
 import arc.struct.Seq;
 import arc.util.Align;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Icon;
-import mindustry.gen.Sounds;
-import mindustry.gen.Tex;
 import mindustry.graphics.Pal;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
 import mindustry.ui.fragments.MenuFragment;
 
-import static arc.graphics.g2d.Draw.getColor;
+import static OblivionEngine.content.OEColor.techBlue;
 import static mindustry.Vars.*;
 import static mindustry.ui.dialogs.PlanetDialog.Mode.look;
 
 public class OEDialog {
+
     public OEDialog() {
 
     }
 
-
     public static void load() {//这是添加触发到已有按钮中
         Vars.ui.settings.addCategory("@oblivine-engine.setting", Icon.settings, Table::clearChildren);
-
+//        ui.settings.buttons.button("@oblivine-engine.OEDebugPanelDialog", Icon.settings, () -> {OEUI.debugpannel.show();});
     }
 
     public static class OEUI implements ApplicationListener {
         public BaseDialog m_theorem = new TheoremDialog();
+        public BaseDialog IQC = new IQCdialog();
         public BaseDialog exportOverview = new PlanetPreviewDialog();
+        public static BaseDialog debugpanel = new OEDebugPanelDialog();
         boolean added;
 
         @Override
         public void init() {
             Events.on(EventType.ClientLoadEvent.class, e -> {
+//                Vars.ui.menuGroup.fill(c -> {OEUITools.setRelativeBounds(c,-0.85f,0f,0.05f,0.02f);c.button("@oblivine-engine.OEDebugPanelDialog",Icon.bookOpen, () -> {OEUI.debugpanel.show();});});// 调试界面
+                Core.scene.add(new Table(){{OEUITools.setRelativeBounds(this,0.1f,0.8f,0f,0f); button("@oblivine-engine.OEDebugPanelDialog",Icon.bookOpen, () -> {OEUI.debugpanel.show();});}});
+
                 for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
                     if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
-                        // 创建新的子菜单，排除 @database
                         Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();
 
                         for (MenuFragment.MenuButton subButton : button.submenu) {
@@ -68,20 +70,15 @@ public class OEDialog {
                                 newSubmenu.add(subButton);
                             }
                         }
-
-                        // 创建新的 menu button
                         MenuFragment.MenuButton newDatabaseButton = new MenuFragment.MenuButton(
                                 "@database.button",
                                 Icon.menu,
                                 () -> {
-                                },  // 主按钮点击事件
+                                },
                                 newSubmenu.toArray(MenuFragment.MenuButton.class)
                         );
-
-                        // 替换原有按钮
                         int index = ui.menufrag.desktopButtons.indexOf(button);
                         ui.menufrag.desktopButtons.set(index, newDatabaseButton);
-
                         break;
                     }
                 }
@@ -94,7 +91,8 @@ public class OEDialog {
                                 newSubmenu.add(new MenuFragment.MenuButton("@theorem", Icon.bookOpen, () -> {
                                     m_theorem.show();
                                 }));
-                                newSubmenu.add(new MenuFragment.MenuButton("@boot.IQC", Icon.redo, () -> {
+                                newSubmenu.add(new MenuFragment.MenuButton("@boot.IQC", Icon.commandAttack, () -> {
+                                    IQC.show();
                                 }));
                             }
                         }
@@ -115,7 +113,6 @@ public class OEDialog {
                     }
                 }
             });
-
         }
 
         @Override
@@ -143,6 +140,7 @@ public class OEDialog {
             super("@planet.preview");
             addCloseButton();
             dragged((cx, cy) -> {
+
                 //no multitouch drag
                 if (Core.input.getTouches() > 1) return;
                 cam.position.add(-cx / Mathf.pow(2, scaling), -cy / Mathf.pow(2, scaling));
@@ -221,324 +219,313 @@ public class OEDialog {
 //            Draw.flush();
 //        }
     }
-//    public static class TheoremDialog extends BaseDialog {
-//        public TheoremDialog() {
-//            super("@planet.preview");
-//            touchable = Touchable.enabled;
-//            cont.add(new Label("q", Styles.outlineLabel){{
-//                setColor(Color.blue);
-//                setFontScale(1.6f);
-//                setText("@theorem");
-//            }});
-//            cont.add(new ImageButton(Icon.cancel, Styles.clearNonei){{
-//                update(() -> {
-//                    getStyle().imageUpColor = Color.white;
-//                });
-//                clicked(() -> hide());
-//            }});
-//            cont.add(new Element(){
-//                Color cyan = Color.cyan;
-//                float time = 0f;
-//                @Override
-//                public void draw(){
-//                    time += Time.delta;
-//                    float progress = (time % 3f) / 3f;
-//
-//                    Draw.color(cyan);
-//                    Draw.alpha(0.8f);
-//
-//                    // 流动光条
-//                    float barWidth = width * 0.3f;
-//                    float xPos = x + progress * (width - barWidth);
-//
-//                    Fill.rect(xPos, y + height/2f, barWidth, 2f);
-//
-//                    // 光晕效果
-//                    Draw.alpha(0.2f);
-//                    Fill.rect(xPos, y + height/2f, barWidth + 20f, 4f);
-//
-//                    Draw.reset();
-//                }
-//            });
-//            cont.add(new Element(){
-//                @Override
-//                public void draw(){
-//                    // 半透明暗色背景
-//                    Draw.color(darkGray);
-//                    Draw.alpha(0.7f);
-//                    Fill.crect(255, 255, 7, 8);
-//
-//                    // 网格线
-//                    Draw.color(techBlue);
-//                    Draw.alpha(0.1f);
-//                    Lines.stroke(0.5f);
-//
-//                    float gridSize = 20f;
-//                    for(float i = x; i < x + 7; i += gridSize){
-//                        Lines.line(i, y, i, y + 8);
-//                    }
-//                    for(float j = y; j < y + 8; j += gridSize){
-//                        Lines.line(x, j, x + 7, j);
-//                    }
-//
-//                    // 闪烁的数据点
-//                    Draw.alpha(0.3f);
-//                    float time = Time.time;
-//                    for(int i = 0; i < 20; i++){
-//                        float px = x + Mathf.random(width);
-//                        float py = y + Mathf.random(height);
-//                        float size = 1f + Mathf.absin(time + i, 2f);
-//                        float alpha = 0.2f + Mathf.absin(time * 2f + i, 0.8f);
-//
-//                        Draw.color(Color.gold);
-//                        Draw.alpha(alpha);
-//                        Fill.circle(px, py, size);
-//                    }
-//
-//                    Draw.reset();
-//                }
-//            });
-//            closeOnBack();
-//        }
-//    }
-public static class TheoremDialog extends BaseDialog {
-    private Color techBlue = Color.valueOf("#50FFFB");
-    private Color matrixGreen = Color.valueOf("#00ff99");
-    private Color darkGray = Color.valueOf("#1a1a2e");
-    private float timeAccumulator = 0f;
-    private boolean isFlashing = true;
-    private float flashInterval = 1.5f;
-    public TheoremDialog() {
-        super("@theorem");
-        title.remove();
-        Seq<Element> children = titleTable.getChildren();
-        for (int i = children.size - 1; i >= 0; i--) {
-            Element child = children.get(i);
-            if (child instanceof Image) {
-                Image image = (Image) child;
-                if (Mathf.equal(image.getHeight(), 3f)) {
-                    titleTable.removeChild(image);
+
+    public static class TheoremDialog extends BaseDialog {
+        Element temp,temp1;
+        String therom = "rational_number";
+        public TheoremDialog() {
+            super("@theorem");
+            title.remove();
+            Seq<Element> children = titleTable.getChildren();
+            for (int i = children.size - 1; i >= 0; i--) {
+                Element child = children.get(i);
+                if (child instanceof Image) {
+                    Image image = (Image) child;
+                    if (Mathf.equal(image.getHeight(), 3f)) {
+                        titleTable.removeChild(image);
+                    }
                 }
             }
+            shouldPause = true;
+//            addCloseButton();
+            touchable = Touchable.enabled;
+            buildInterface();
+            closeOnBack();
         }
-        shouldPause = true;
-        addCloseButton();
-        touchable = Touchable.enabled;
-        buildInterface();
-        closeOnBack();
+
+        private void buildInterface() {
+            WidgetGroup group = new WidgetGroup();
+//            group.addChild(new Button(){{OEUITools.setRelativeBounds(this,0f,0f,90,90);}});
+//            group.addChild(new Label("@definition."+therom+".name"){{setBounds(-500,-400,50,50);}})
+            group.addChild(new Label("@definition."+therom+".name"){{
+                OEUITools.setRelativeBounds(this,0f,0.945f,50,50);
+                setColor(techBlue.a(1f));
+//                setFontScale(1.8f);
+                setAlignment(Align.center);
+            }});
+            group.addChild(
+                temp = new Element(){
+                    @Override
+                    public void draw(){
+                        Draw.color(techBlue);
+                        float barHeight = 0f;
+                        float padding = 1920f;
+                        Draw.alpha(0.35f);
+                        Fill.crect(x + padding - 2f, y + height - barHeight - 7f, width - (padding - 2f) * 2f, barHeight + 4f);
+                        Draw.reset();
+                    }
+                }
+            );
+            OEUITools.setRelativeBounds(temp,0f,0.867f,50,50);
+            group.addChild(
+                new Table(){{
+                    OEUITools.setRelativeBounds(this,0f,0.868f,50,50);
+                    margin(15f);
+                    add(new Label("@definition."+therom+".content"){{
+                        setWrap(true);
+                        setAlignment(Align.center, Align.left);
+                        setColor(OEColor.highwhite);
+                    }});
+                }}
+            );
+            group.addChild(new Table(){{
+                OEUITools.setRelativeBounds(this,-0.976f,0.956f,1,1);
+                add(new ImageButton(Icon.cancel, Styles.clearNonei){{
+                    update(() -> {
+                        getStyle().imageUpColor = isOver() ? Color.white : techBlue;
+                    });
+                    clicked(() -> hide());
+                }}).size(25f);
+            }});
+            group.addChild(new Table(){{
+                add(new Element() {
+                    private float time = 0f;
+                    private Color[] chessPattern = {Color.blue.mulA(0.3F).g(200f).b(200f),techBlue.mulA(0.3F)};  // 棋盘图案
+                    private Color lineColor = Color.darkGray;  // 线框颜色
+
+                    @Override
+                    public void draw() {
+                        time += Time.delta;
+                        // 在Element的局部坐标系中，中心是它的中间
+                        float centerX = 111f;
+                        float centerY = 111f;
+                        float radius = 90f;  // 减小半径适应50x50大小
+                        // 减慢旋转速度
+                        float slowFactor = 0.333f;
+                        float rotationX = time * 0.2f * slowFactor;  // X轴旋转
+                        float rotationY = time * 0.15f * slowFactor; // Y轴旋转
+                        float rotationZ = time * 0.1f * slowFactor;  // Z轴旋转
+                        // 绘制3D球体的线框
+                        Draw.color(lineColor);
+                        Draw.alpha(0.6f);
+                        Lines.stroke(1f);  // 减细线宽
+                        // 简化网格，适应小尺寸
+                        for (int lon = 0; lon < 180; lon += 30) {
+                            Lines.beginLine();
+                            for (int lat = 0; lat <= 360; lat += 10) {
+                                float x = get3DX(lat, lon, radius, rotationX, rotationY, rotationZ);
+                                float y = get3DY(lat, lon, radius, rotationX, rotationY, rotationZ);
+                                Lines.linePoint(centerX + x, centerY + y);
+                            }
+                            Lines.endLine();
+                        }
+                        // 绘制纬线
+                        for (int lat = 0; lat < 180; lat += 30) {
+                            Lines.beginLine();
+                            for (int lon = 0; lon <= 360; lon += 10) {
+                                float x = get3DX(lon, lat, radius, rotationX, rotationY, rotationZ);
+                                float y = get3DY(lon, lat, radius, rotationX, rotationY, rotationZ);
+                                Lines.linePoint(centerX + x, centerY + y);
+                            }
+                            Lines.endLine();
+                        }
+                        // 简化棋盘图案
+                        int segments = 6;
+                        float angleStep = 360f / segments;
+
+                        for (int i = 0; i < segments; i++) {
+                            for (int j = 0; j < segments; j++) {
+                                float angle1 = i * angleStep;
+                                float angle2 = (i + 1) * angleStep;
+                                float angle3 = j * angleStep;
+                                float angle4 = (j + 1) * angleStep;
+                                // 计算四个顶点
+                                float[] points = new float[8];
+                                int idx = 0;
+
+                                for (float lat = angle3; lat <= angle4; lat += angleStep) {
+                                    for (float lon = angle1; lon <= angle2; lon += angleStep) {
+                                        points[idx++] = centerX + get3DX(lon, lat, radius, rotationX, rotationY, rotationZ);
+                                        points[idx++] = centerY + get3DY(lon, lat, radius, rotationX, rotationY, rotationZ);
+                                    }
+                                }
+                                // 绘制棋盘方格
+                                if ((i + j) % 2 == 0) {
+                                    Draw.color(chessPattern[0]);
+                                } else {
+                                    Draw.color(chessPattern[1]);
+                                }
+                                Draw.alpha(0.6f);  // 增加透明度
+                                // 绘制四边形
+                                if (points.length >= 8) {
+                                    Fill.quad(
+                                            points[0], points[1],
+                                            points[2], points[3],
+                                            points[4], points[5],
+                                            points[6], points[7]
+                                    );
+                                }
+                            }
+                        }
+                        // 绘制中心点标记
+                        Draw.color(Color.red);
+                        Fill.circle(centerX, centerY, 2f);
+
+                        Draw.reset();
+                    }
+                    // 3D坐标转换函数
+                    private float get3DX(float lon, float lat, float radius, float rx, float ry, float rz) {
+                        float lonRad = Mathf.degRad * lon;
+                        float latRad = Mathf.degRad * lat;
+
+                        float x = radius * Mathf.sin(latRad) * Mathf.cos(lonRad);
+                        float y = radius * Mathf.sin(latRad) * Mathf.sin(lonRad);
+                        float z = radius * Mathf.cos(latRad);
+
+                        float tempY = y * Mathf.cos(rx) - z * Mathf.sin(rx);
+                        float tempZ = y * Mathf.sin(rx) + z * Mathf.cos(rx);
+                        y = tempY;
+                        z = tempZ;
+
+                        float tempX = x * Mathf.cos(ry) + z * Mathf.sin(ry);
+                        tempZ = -x * Mathf.sin(ry) + z * Mathf.cos(ry);
+                        x = tempX;
+                        z = tempZ;
+
+                        tempX = x * Mathf.cos(rz) - y * Mathf.sin(rz);
+                        tempY = x * Mathf.sin(rz) + y * Mathf.cos(rz);
+                        x = tempX;
+                        y = tempY;
+
+                        return x;
+                    }
+
+                    private float get3DY(float lon, float lat, float radius, float rx, float ry, float rz) {
+                        float lonRad = Mathf.degRad * lon;
+                        float latRad = Mathf.degRad * lat;
+
+                        float x = radius * Mathf.sin(latRad) * Mathf.cos(lonRad);
+                        float y = radius * Mathf.sin(latRad) * Mathf.sin(lonRad);
+                        float z = radius * Mathf.cos(latRad);
+
+                        float tempY = y * Mathf.cos(rx) - z * Mathf.sin(rx);
+                        float tempZ = y * Mathf.sin(rx) + z * Mathf.cos(rx);
+                        y = tempY;
+                        z = tempZ;
+
+                        float tempX = x * Mathf.cos(ry) + z * Mathf.sin(ry);
+                        tempZ = -x * Mathf.sin(ry) + z * Mathf.cos(ry);
+                        x = tempX;
+                        z = tempZ;
+
+                        tempX = x * Mathf.cos(rz) - y * Mathf.sin(rz);
+                        tempY = x * Mathf.sin(rz) + y * Mathf.cos(rz);
+                        x = tempX;
+                        y = tempY;
+
+                        return y;
+                    }
+                }).grow();
+            }});
+
+            cont.add(group);
+        }
+
+        @Override
+        public void hide() {
+            super.hide();
+//            Sounds.click.play();
+        }
     }
 
-    private void buildInterface() {
-        //标题
-        Stack stack = new Stack();
-        stack.add(new Label("@theorem.title", Styles.outlineLabel){{//cont.add(new Label("@theorem.title", Styles.outlineLabel){{
-            setColor(matrixGreen);
-            setFontScale(1.8f);
-            setAlignment(Align.center);
-//            // 标题闪烁效果
-//            update(() -> {
-//                if (TheoremDialog.this.isShown()) {
-//                    float pulse = 0.7f + Mathf.absin(Time.time * 1.5f, 0.3f);
-//                    getColor().a = pulse;
-//                } else {
-//                    getColor().a = 1f;
-//                }
-//            });
-        }});//.growX().center().padBottom(15f);
-        stack.add(new ImageButton(Icon.cancel, Styles.clearNonei){{
-            setPosition(getWidth() - 7f, getHeight() - 7f);
-//            setSize(100f, 50f);
-            update(() -> {
-                getStyle().imageUpColor = isOver() ? Color.white : techBlue;
-            });
-            clicked(() -> {
-                hide();
-            });
-        }});
-        cont.add(stack).row();
-        //关闭
-//        cont.add(new ImageButton(Icon.cancel, Styles.clearNonei){{
-//            update(() -> {
-//                getStyle().imageUpColor = isOver() ? Color.white : techBlue;
-//            });
-//            clicked(() -> TheoremDialog.this.hide());
-//        }}).size(0f).pad(0f).right().row();
-        //闪烁长条
-        cont.add(new Element(){
-            @Override
-            public void draw(){
-//                // 更新计时器
-//                timeAccumulator += Time.delta;
-//
-//                // 控制闪烁状态
-////                if (timeAccumulator >= flashInterval) {
-////                    isFlashing = !isFlashing;
-////                    timeAccumulator = 0f;
-////
-////                    // 随机改变闪烁间隔
-////                    flashInterval = Mathf.random(1.0f, 2.0f);
-////                }
-//
-//                // 计算闪烁强度
-//                float flashIntensity = 0f;
-//                if (isFlashing) {
-//                    // 闪烁阶段的强度变化
-//                    float progress = timeAccumulator / flashInterval;
-//                    flashIntensity = Mathf.curve(progress, 0.1f, 0.8f);
-//                }
-//
-//                if (flashIntensity > 0.01f) {
-//                    // 绘制闪烁长条
-                    Draw.color(techBlue);
-//                    Draw.alpha(flashIntensity);
-
-                    //长条参数
-                    float barHeight = 0f;
-                    float padding = 20f;
-                    //顶部
-                    Fill.crect(x + padding, y + height - barHeight - 5f, width - padding * 2f, barHeight);
-                    //底部
-                    Fill.crect(x + padding, y + 5f, width - padding * 2f, barHeight);
-                    //侧边
-                    Fill.crect(x + 5f, y + padding, barHeight, height - padding * 2f);
-                    Fill.crect(x + width - barHeight - 5f, y + padding, barHeight, height - padding * 2f);
-                    //光晕
-                    Draw.alpha(0.35f);
-                    Fill.crect(x + padding - 2f, y + height - barHeight - 7f, width - (padding - 2f) * 2f, barHeight + 4f);
-                    Fill.crect(x + padding - 2f, y + 3f, width - (padding - 2f) * 2f, barHeight + 4f);
-                    Draw.reset();
-                }
-//            }
-        }).growX().height(0f).pad(0f).row();
-        //定理
-        cont.add(new Table(){{
-            margin(15f);
-
-            add(new Label("@theorem.content"){{
-                setWrap(true);
-                setAlignment(Align.center, Align.left);
-                setColor(Color.white);
-                //文字呼吸
-                update(() -> {
-                    if (TheoremDialog.this.isShown()) {
-                        float breath = 0.8f + Mathf.absin(Time.time * 0.8f, 0.2f);
-                        getColor().a = breath;
-                    } else {
-                        getColor().a = 1f;
+    public static class IQCdialog extends BaseDialog {
+        public IQCdialog() {
+            super("");
+            title.remove();
+            Seq<Element> children = titleTable.getChildren();
+            for (int i = children.size - 1; i >= 0; i--) {
+                Element child = children.get(i);
+                if (child instanceof Image) {
+                    Image image = (Image) child;
+                    if (Mathf.equal(image.getHeight(), 3f)) {
+                        titleTable.removeChild(image);
                     }
-                });
-            }}).grow().pad(20f);
-        }}).grow().pad(10f).row();
-        //网格背景
-        cont.addChild(new Element(){
-            @Override
-            public void draw(){
-                if (!TheoremDialog.this.isShown()) return;
-                //半透明暗色背景
-                Draw.color(Color.blue);
-                Draw.alpha(0.3f);
-                Fill.crect(x, y, width, height);
-                //网格线
-                Draw.color(techBlue);
-                Draw.alpha(0.08f);
-                Lines.stroke(0.5f);
-                float gridSize = 25f;
-                for(float i = x; i < x + width; i += gridSize){
-                    Lines.line(i, y, i, y + height);
                 }
-                for(float j = y; j < y + height; j += gridSize){
-                    Lines.line(x, j, x + width, j);
-                }
-                //动态数据点
-                float time = Time.time;
-                for(int i = 0; i < 15; i++){
-                    float offset = i * 0.7f;
-                    float px = x + Mathf.sin(time + offset) * 10f + width * 0.5f;
-                    float py = y + Mathf.cos(time * 1.3f + offset) * 8f + height * 0.5f;
-                    float size = 0.5f + Mathf.absin(time * 2f + i, 1.5f);
-                    float alpha = 0.1f + Mathf.absin(time * 3f + i, 0.9f);
-
-                    Draw.color(i % 2 == 0 ? matrixGreen : techBlue);
-                    Draw.alpha(alpha);
-                    Fill.circle(px, py, size);
-                }
-                Draw.reset();
             }
-        });
-        //控制按钮
-        Table buttonTable = new Table(){{
-            defaults().size(120f, 40f).pad(5f);
-            // 上一个定理按钮
-            button("@theorem.prev", Icon.left, Styles.flatTogglet, () -> {
-                Vars.ui.showInfo("@theorem.nav.prev");
-            }).update(b -> {
-                b.getStyle().fontColor = b.isOver() ? matrixGreen : Color.lightGray;
-            });
-            // 下一个定理按钮
-            button("@theorem.next", Icon.right, Styles.flatTogglet, () -> {
-                Vars.ui.showInfo("@theorem.nav.next");
-            }).update(b -> {
-                b.getStyle().fontColor = b.isOver() ? matrixGreen : Color.lightGray;
-            });
-            // 证明按钮
-            button("@theorem.prove", Icon.zoom, Styles.flatTogglet, () -> {
-                Vars.ui.showInfo("@theorem.proof.show");
-            }).update(b -> {
-                b.getStyle().fontColor = b.isOver() ? Color.valueOf("#ff66cc") : Color.lightGray;
-            });
-        }};
-        cont.add(buttonTable).growX().pad(10f).row();
-        // 状态显示
-        cont.add(new Table(){{
-            background(Tex.button);
-            add(new Label("@theorem.status.active", Styles.outlineLabel){{
-                setColor(matrixGreen);
-                setFontScale(0.9f);
-                update(() -> {
-                    if (TheoremDialog.this.isShown()) {
-                        // 动态状态文本
-                        float time = Time.time;
-                        String[] statuses = {
-                                "@theorem.status.processing",
-                                "@theorem.status.analyzing",
-                                "@theorem.status.verified",
-                                "@theorem.status.active"
-                        };
-                        int index = ((int)(time * 0.3f)) % statuses.length;
-                        setText(statuses[index]);
+            closeOnBack();
+            setStyle(OEStyle.TheoremDialog);
 
-                        // 状态文本闪烁
-                        float flash = Mathf.absin(time * 2f, 0.5f);
-                        getColor().a = 0.7f + flash;
-                    } else {
-                        getColor().a = 1f;
-                        setText("@theorem.status.ready");
+            WidgetGroup container = new WidgetGroup();
+
+        }
+    }
+
+    public static class OEDebugPanelDialog extends BaseDialog {
+        public OEDebugPanelDialog() {
+            super("");
+            title.remove();
+            Seq<Element> children = titleTable.getChildren();
+            for (int i = children.size - 1; i >= 0; i--) {
+                Element child = children.get(i);
+                if (child instanceof Image) {
+                    Image image = (Image) child;
+                    if (Mathf.equal(image.getHeight(), 3f)) {
+                        titleTable.removeChild(image);
                     }
-                });
-            }}).pad(5f);
-        }}).growX().height(30f).pad(5f);
-    }
+                }
+            }
+            closeOnBack();
+            setStyle(OEStyle.DebugPanel);
+            addCloseButton();
+            WidgetGroup container = new WidgetGroup();
 
-    // 对话框显示时的特效
-//    @Override
-//    public Dialog show() {
-//        super.show();
-//
-//        // 重置动画状态
-//        timeAccumulator = 0f;
-//        isFlashing = true;
-//        flashInterval = 1.5f;
-//
-//        // 播放显示音效
-//        Sounds.message.play();
-//        return null;
-//    }
+            Table noise = new Table(){{
+                OENoise.PerlinNoiseElement noiseElement = new OENoise.PerlinNoiseElement(12345, 100, 100, 0.1f, 6, 0.5);
+                Slider scaleSlider,octavesSlider,persistenceSlider;
+                TextField seedField;
 
-    // 对话框隐藏时的清理
-    @Override
-    public void hide() {
-        super.hide();
-        //Sounds.click.play();
+                OEUITools.setRelativeBounds(this,-0.7f,0f,0f,0f);// 调整位置
+                add(new Table(){{add(noiseElement).grow();}}).size(200f, 200f).pad(10f).row();
+                add(new Label("柏林噪声控制")).color(techBlue).padTop(20f).row();
+                add(new Label("种子:")).left().padLeft(10f);
+                add(seedField = new TextField("12345"){{setMaxLength(10);}}).width(100f).pad(5f).row();
+                add(new Label("缩放:")).left().padLeft(10f);
+                add(scaleSlider = new Slider(0.01f, 1.0f, 0.01f, false){{setValue(0.1f);}}).width(200f).pad(5f).row();
+                add(new Label("层数:")).left().padLeft(10f);
+                add(octavesSlider = new Slider(1, 10, 1, false){{setValue(6);}}).width(200f).pad(5f).row();
+                add(new Label("持久度:")).left().padLeft(10f);
+                add(persistenceSlider = new Slider(0.1f, 1.0f, 0.1f, false){{setValue(0.5f);}}).width(200f).pad(5f).row();
+                button("重新生成噪声", () -> {
+                    try {
+                        int newSeed = Integer.parseInt(seedField.getText());
+                        float newScale = scaleSlider.getValue();
+                        int newOctaves = (int)octavesSlider.getValue();
+                        double newPersistence = persistenceSlider.getValue();
+
+                        Log.info("[OE][Debug] 柏林噪声：种子: "+seedField.getText()+", 缩放: "+scaleSlider.getValue()+", 层数: "+octavesSlider.getValue()+", 持久度: "+persistenceSlider.getValue());
+
+                        if (noiseElement != null) {
+                            noiseElement.regenerate(newSeed, newScale, newOctaves, newPersistence);
+                        }
+                    } catch (NumberFormatException e) {
+
+                    }
+                }).size(150f, 40f).pad(10f).row();
+            }};
+            container.addChild(noise);
+            Table weather = new Table(){{
+                TextField time;
+
+                OEUITools.setRelativeBounds(this,0f,0f,0f,0f);// 调整位置
+                add(new Label("天气控制器")).color(techBlue).padTop(20f).row();
+                add(new Label("持续时间(s):")).left().padLeft(10f);
+                add(time = new TextField("30"){{setMaxLength(10);}}).width(100f).pad(5f).row();
+                button("晴天", () -> {mods.getScripts().runConsole("Groups.weather.each(w => w.remove());");}).width(100f).pad(5f).row();
+                button("雨天", () -> {mods.getScripts().runConsole("Vars.content.getByName(ContentType.weather, 'rain').create(1.0, "+String.valueOf(60 * Integer.parseInt(time.getText()))+")");}).width(100f).pad(5f).row();
+            }};
+            container.addChild(weather);
+
+            cont.add(container);
+        }
     }
-}
 }

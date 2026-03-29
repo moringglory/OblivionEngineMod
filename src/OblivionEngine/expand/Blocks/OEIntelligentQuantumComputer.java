@@ -37,7 +37,6 @@ public class OEIntelligentQuantumComputer extends Block {
         solid = true;
         update = true;
         flags = EnumSet.of(BlockFlag.factory);
-        size = 2;
     }
 
     @Override
@@ -224,7 +223,7 @@ public class OEIntelligentQuantumComputer extends Block {
                 // 绘制发光效果
                 TextureRegion glow = Core.atlas.find("oblivion-engine-precursor");
                 if (true) {
-                    Log.info("[OE] find textureregion glow");
+//                    Log.info("[OE] find textureregion glow");
                     float glowScale = (1f - glowMag + Mathf.absin(glowScl, glowMag)) * shieldRadius;
                     Drawf.additive(glow, glowColor, glowScale, x, y, 0f, Layer.blockAdditive);
                 }

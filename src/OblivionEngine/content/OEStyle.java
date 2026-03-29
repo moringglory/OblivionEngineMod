@@ -1,6 +1,7 @@
 package OblivionEngine.content;
 
 import arc.graphics.Color;
+import arc.scene.style.Drawable;
 import arc.scene.ui.Dialog;
 import arc.scene.ui.TextField;
 import mindustry.ui.Fonts;
@@ -25,5 +26,17 @@ public class OEStyle {
         titleFont = Fonts.def;
         titleFontColor = OEColor.highwhite;
         stageBackground = null;
+    }};
+    public static Dialog.DialogStyle DebugPanel = new Dialog.DialogStyle(){{
+        background = Styles.grayPanel;
+        titleFont = Fonts.def;
+        titleFontColor = OEColor.highwhite;
+        stageBackground = null;
+    }};
+
+    public static TextField.TextFieldStyle DebugPanelText = new TextField.TextFieldStyle(){{
+        background = null;
+        font = Fonts.def;
+        fontColor = Color.yellow;
     }};
 }

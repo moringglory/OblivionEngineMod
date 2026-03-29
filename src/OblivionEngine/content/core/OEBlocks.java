@@ -1,6 +1,7 @@
 package OblivionEngine.content.core;
 
 import OblivionEngine.expand.Blocks.OEExcavator;
+import OblivionEngine.expand.Blocks.T_EnvironmentTransformation;
 import OblivionEngine.expand.Payload.OEPayloadBlock;
 import arc.graphics.Color;
 import arc.struct.Seq;
@@ -39,7 +40,7 @@ public class OEBlocks {
             //矿石
             UraniumOre,
             //智能量子计算机
-            IQC_980D,ICQ_380D,
+            IQC_980D,ICQ_380D,T1,
             //载荷产物(方块实现方法)
             stone_materiala;
     public static @Nullable ItemStack outputItem;
@@ -157,6 +158,11 @@ public class OEBlocks {
             requirements(Category.logic, with(Items.silicon, 50, Items.beryllium, 75, Items.tungsten, 40));
             hasPower = true;
             consumePower(2.5f);
+            size = 3;
+            alwaysUnlocked = false;
+        }};
+        T1 = new T_EnvironmentTransformation("T1"){{
+            requirements(Category.logic, with(Items.silicon, 50, Items.beryllium, 75, Items.tungsten, 40));
             size = 3;
             alwaysUnlocked = false;
         }};

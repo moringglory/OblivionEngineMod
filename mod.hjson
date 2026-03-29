@@ -9,7 +9,7 @@ main: "OblivionEngine.OblivionEngine"
 
 description: "[sky]Alpha OblivionEngine Ver:1.0.1"
 
-version: beta 0.1.1
+version: beta_0.1.1.95
 
 minGameVersion: 147
 

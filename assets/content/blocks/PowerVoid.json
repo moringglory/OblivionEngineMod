@@ -12,8 +12,6 @@
       "amount": 6
     }
   ],
-  "lightningChance": 10,
-  "lightningDamage": 10,
   "category": "defense",
   "research": "copper-wall"
 }
