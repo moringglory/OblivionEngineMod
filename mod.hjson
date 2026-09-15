@@ -1,16 +1,15 @@
-displayName: "OblivionEngine"
+displayName: "Oblivion Engine"
 
 name: "oblivion-engine"
 
 author: "Shiraelle"
 
-main: "OblivionEngine.OblivionEngine"
-#main: "others.disintegration.DisintegrationJavaMod"
+main: "oblivionengine.OblivionEngine"
 
 description: "[sky]Alpha OblivionEngine Ver:1.0.1"
 
 version: beta_0.1.1.95
 
-minGameVersion: 147
+minGameVersion: 157.1
 
 java: true
