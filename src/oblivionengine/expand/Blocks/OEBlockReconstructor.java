@@ -1,13 +1,16 @@
 package oblivionengine.expand.Blocks;
 
+import arc.audio.Sound;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
+import arc.math.Mathf;
 import arc.util.Eachable;
+import mindustry.content.Fx;
+import mindustry.entities.Effect;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
-import mindustry.graphics.Drawf;
+import mindustry.gen.Sounds;
 import mindustry.graphics.Layer;
-import mindustry.world.blocks.payloads.BuildPayload;
 import mindustry.world.blocks.payloads.Payload;
  import mindustry.world.blocks.payloads.PayloadBlock;
 import mindustry.world.blocks.payloads.UnitPayload;
@@ -16,6 +19,9 @@ import oblivionengine.content.core.OEUnits;
 
 public class OEBlockReconstructor extends PayloadBlock {
     public float constructTime = 60 * 2;
+    public Sound createSound = Sounds.unitCreate;
+    public float createSoundVolume = 1f;
+
     public OEBlockReconstructor(String name) {
         super(name);
 
@@ -29,6 +35,11 @@ public class OEBlockReconstructor extends PayloadBlock {
         rotate = true;
         regionRotated1 = 1;
     }
+
+//    @Override
+//    public boolean isHidden() {
+//        return true;
+//    }
 
     @Override
     public void drawPlanRegion(BuildPlan plan, Eachable<BuildPlan> list){
@@ -45,6 +56,8 @@ public class OEBlockReconstructor extends PayloadBlock {
 
     public class OEBlockReconstructorBuild extends PayloadBlockBuild {
 
+        public float progress, time, speedScl;
+
         boolean constructing;
 
         public float fraction(){
@@ -53,11 +66,8 @@ public class OEBlockReconstructor extends PayloadBlock {
 
         @Override
         public boolean acceptPayload(Building source, Payload payload) {
-            if (this.payload == null) {
-                return true;
-            }
-
-            return false;
+            if (this.payload != null) return false;
+            return payload.content() == OEBlocks.stone_materiala;
         }
 
         @Override
@@ -69,15 +79,24 @@ public class OEBlockReconstructor extends PayloadBlock {
         public void updateTile() {
             super.updateTile();
 
+            progress = 121;//test
             if(payload != null) {
                 if(payload.content() != OEBlocks.stone_materiala) {
                     moveOutPayload();
                 } else {
                     if(moveInPayload()) {
                         if(efficiency > 0){
+
+//                            Events.fire(new EventType.UnitCreateEvent(payload., this));
+                        }
+                        if(progress >= constructTime){
                             payload = null;
                             payload = new UnitPayload(OEUnits.depleted_uranium.create(team));
-
+                            createSound.at(this, 1f + Mathf.range(0.06f), createSoundVolume);
+                            progress %= 1f;
+                            Effect.shake(2f, 3f, this);
+                            Fx.producesmoke.at(this);
+                            consume();
                         }
                     }
                 }

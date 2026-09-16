@@ -1,8 +1,8 @@
-package OblivionEngine.expand.ui;
+package oblivionengine.expand.ui;
 
-import OblivionEngine.content.OEColor;
-import OblivionEngine.content.OENoise;
-import OblivionEngine.content.OEStyle;
+import oblivionengine.content.OEColor;
+import oblivionengine.content.OENoise;
+import oblivionengine.content.OEStyle;
 import arc.ApplicationListener;
 import arc.Core;
 import arc.Events;
@@ -34,7 +34,7 @@ import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
 import mindustry.ui.fragments.MenuFragment;
 
-import static OblivionEngine.content.OEColor.techBlue;
+import static oblivionengine.content.OEColor.techBlue;
 import static mindustry.Vars.*;
 import static mindustry.ui.dialogs.PlanetDialog.Mode.look;
 
@@ -50,9 +50,9 @@ public class OEDialog {
     }
 
     public static class OEUI implements ApplicationListener {
-        public BaseDialog m_theorem = new TheoremDialog();
-        public BaseDialog IQC = new IQCdialog();
-        public BaseDialog exportOverview = new PlanetPreviewDialog();
+        public static BaseDialog m_theorem = new TheoremDialog();
+        public static BaseDialog IQC = new IQCdialog();
+        public static BaseDialog exportOverview = new PlanetPreviewDialog();
         public static BaseDialog debugpanel = new OEDebugPanelDialog();
         boolean added;
 
@@ -62,57 +62,57 @@ public class OEDialog {
 //                Vars.ui.menuGroup.fill(c -> {OEUITools.setRelativeBounds(c,-0.85f,0f,0.05f,0.02f);c.button("@oblivine-engine.OEDebugPanelDialog",Icon.bookOpen, () -> {OEUI.debugpanel.show();});});// 调试界面
                 Core.scene.add(new Table(){{OEUITools.setRelativeBounds(this,0.1f,0.8f,0f,0f); button("@oblivine-engine.OEDebugPanelDialog",Icon.bookOpen, () -> {OEUI.debugpanel.show();});}});
 
-                for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
-                    if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
-                        Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();
-
-                        for (MenuFragment.MenuButton subButton : button.submenu) {
-                            if (!"@database".equals(subButton.text)) {  // 跳过 @database
-                                newSubmenu.add(subButton);
-                            }
-                        }
-                        MenuFragment.MenuButton newDatabaseButton = new MenuFragment.MenuButton(
-                                "@database.button",
-                                Icon.menu,
-                                () -> {
-                                },
-                                newSubmenu.toArray(MenuFragment.MenuButton.class)
-                        );
-                        int index = ui.menufrag.desktopButtons.indexOf(button);
-                        ui.menufrag.desktopButtons.set(index, newDatabaseButton);
-                        break;
-                    }
-                }
-                for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
-                    if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
-                        Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();// 找到 database.button 的 submenu
-                        for (MenuFragment.MenuButton subButton : button.submenu) {// 遍历原有子菜单
-                            newSubmenu.add(subButton);// 添加原有按钮
-                            if ("@schematics".equals(subButton.text)) {// 在 @schematics 之后添加自定义按钮
-                                newSubmenu.add(new MenuFragment.MenuButton("@theorem", Icon.bookOpen, () -> {
-                                    m_theorem.show();
-                                }));
-                                newSubmenu.add(new MenuFragment.MenuButton("@boot.IQC", Icon.commandAttack, () -> {
-                                    IQC.show();
-                                }));
-                            }
-                        }
-                        MenuFragment.MenuButton newDatabaseButton = new MenuFragment.MenuButton(// 创建新的 database.button
-                                "@database.button",
-                                Icon.menu,
-                                () -> {
-                                },  // 主按钮点击事件（通常为空）
-                                newSubmenu.toArray(MenuFragment.MenuButton.class)
-                        );
-                        boolean menuadded = false;
-                        if (!menuadded) {
-                            menuadded = true;
-                            int index = ui.menufrag.desktopButtons.indexOf(button);// 替换原有的 database.button
-                            ui.menufrag.desktopButtons.set(index, newDatabaseButton);
-                        }
-                        break;
-                    }
-                }
+//                for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
+//                    if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
+//                        Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();
+//
+//                        for (MenuFragment.MenuButton subButton : button.submenu) {
+//                            if (!"@database".equals(subButton.text)) {  // 跳过 @database
+//                                newSubmenu.add(subButton);
+//                            }
+//                        }
+//                        MenuFragment.MenuButton newDatabaseButton = new MenuFragment.MenuButton(
+//                                "@database.button",
+//                                Icon.menu,
+//                                () -> {
+//                                },
+//                                newSubmenu.toArray(MenuFragment.MenuButton.class)
+//                        );
+//                        int index = ui.menufrag.desktopButtons.indexOf(button);
+//                        ui.menufrag.desktopButtons.set(index, newDatabaseButton);
+//                        break;
+//                    }
+//                }
+//                for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
+//                    if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
+//                        Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();// 找到 database.button 的 submenu
+//                        for (MenuFragment.MenuButton subButton : button.submenu) {// 遍历原有子菜单
+//                            newSubmenu.add(subButton);// 添加原有按钮
+//                            if ("@schematics".equals(subButton.text)) {// 在 @schematics 之后添加自定义按钮
+//                                newSubmenu.add(new MenuFragment.MenuButton("@theorem", Icon.bookOpen, () -> {
+//                                    m_theorem.show();
+//                                }));
+//                                newSubmenu.add(new MenuFragment.MenuButton("@boot.IQC", Icon.commandAttack, () -> {
+//                                    IQC.show();
+//                                }));
+//                            }
+//                        }
+//                        MenuFragment.MenuButton newDatabaseButton = new MenuFragment.MenuButton(// 创建新的 database.button
+//                                "@database.button",
+//                                Icon.menu,
+//                                () -> {
+//                                },  // 主按钮点击事件（通常为空）
+//                                newSubmenu.toArray(MenuFragment.MenuButton.class)
+//                        );
+//                        boolean menuadded = false;
+//                        if (!menuadded) {
+//                            menuadded = true;
+//                            int index = ui.menufrag.desktopButtons.indexOf(button);// 替换原有的 database.button
+//                            ui.menufrag.desktopButtons.set(index, newDatabaseButton);
+//                        }
+//                        break;
+//                    }
+//                }
             });
         }
 
@@ -464,6 +464,7 @@ public class OEDialog {
     public static class OEDebugPanelDialog extends BaseDialog {
         public OEDebugPanelDialog() {
             super("");
+
             title.remove();
             Seq<Element> children = titleTable.getChildren();
             for (int i = children.size - 1; i >= 0; i--) {
@@ -480,53 +481,357 @@ public class OEDialog {
             addCloseButton();
             WidgetGroup container = new WidgetGroup();
 
-            Table noise = new Table(){{
-                OENoise.PerlinNoiseElement noiseElement = new OENoise.PerlinNoiseElement(12345, 100, 100, 0.1f, 6, 0.5);
-                Slider scaleSlider,octavesSlider,persistenceSlider;
-                TextField seedField;
+            Table noise = new Table(){
+                @Override
+                public void draw() {
+                    super.draw();
 
-                OEUITools.setRelativeBounds(this,-0.7f,0f,0f,0f);// 调整位置
-                add(new Table(){{add(noiseElement).grow();}}).size(200f, 200f).pad(10f).row();
-                add(new Label("柏林噪声控制")).color(techBlue).padTop(20f).row();
-                add(new Label("种子:")).left().padLeft(10f);
-                add(seedField = new TextField("12345"){{setMaxLength(10);}}).width(100f).pad(5f).row();
-                add(new Label("缩放:")).left().padLeft(10f);
-                add(scaleSlider = new Slider(0.01f, 1.0f, 0.01f, false){{setValue(0.1f);}}).width(200f).pad(5f).row();
-                add(new Label("层数:")).left().padLeft(10f);
-                add(octavesSlider = new Slider(1, 10, 1, false){{setValue(6);}}).width(200f).pad(5f).row();
-                add(new Label("持久度:")).left().padLeft(10f);
-                add(persistenceSlider = new Slider(0.1f, 1.0f, 0.1f, false){{setValue(0.5f);}}).width(200f).pad(5f).row();
-                button("重新生成噪声", () -> {
-                    try {
-                        int newSeed = Integer.parseInt(seedField.getText());
-                        float newScale = scaleSlider.getValue();
-                        int newOctaves = (int)octavesSlider.getValue();
-                        double newPersistence = persistenceSlider.getValue();
+                    float centerX = getX(Align.center);
+                    float centerY = getY(Align.center);
 
-                        Log.info("[OE][Debug] 柏林噪声：种子: "+seedField.getText()+", 缩放: "+scaleSlider.getValue()+", 层数: "+octavesSlider.getValue()+", 持久度: "+persistenceSlider.getValue());
+                    float leftBottomX = -150f;
+                    float leftBottomY = -260f;
+                    float rightTopX = 190f;
+                    float rightTopY = 360f;
 
-                        if (noiseElement != null) {
-                            noiseElement.regenerate(newSeed, newScale, newOctaves, newPersistence);
+                    float actualLeftBottomX = centerX + leftBottomX;
+                    float actualLeftBottomY = centerY + leftBottomY;
+                    float actualRightTopX = centerX + rightTopX;
+                    float actualRightTopY = centerY + rightTopY;
+
+                    float width = actualRightTopX - actualLeftBottomX;
+                    float height = actualRightTopY - actualLeftBottomY;
+
+                    Draw.color(techBlue);
+                    Lines.stroke(2f);
+                    Lines.rect(actualLeftBottomX, actualLeftBottomY, width, height);
+                    Draw.reset();
+                }
+                {
+                    OENoise.PerlinNoiseElement noiseElement = new OENoise.PerlinNoiseElement(12345, 100, 100, 0.1f, 6, 0.5);
+                    Slider scaleSlider,octavesSlider,persistenceSlider;
+                    TextField seedField;
+
+                    OEUITools.setRelativeBounds(this,-0.7f,0f,0f,0f);// 调整位置
+                    add(noiseElement).size(200f).pad(5f).row();
+                    row();
+                    add(new Label("柏林噪声控制")).color(techBlue).row();
+                    add(new Label("种子:"));
+                    add(seedField = new TextField("12345"){{setMaxLength(10);}}).pad(5f).row();
+                    add(new Label("缩放:"));
+                    add(scaleSlider = new Slider(0.01f, 1.0f, 0.01f, false){{setValue(0.1f);}}).pad(5f).row();
+                    add(new Label("层数:"));
+                    add(octavesSlider = new Slider(1, 10, 1, false){{setValue(6);}}).pad(5f).row();
+                    add(new Label("持久度:"));
+                    add(persistenceSlider = new Slider(0.1f, 1.0f, 0.1f, false){{setValue(0.5f);}}).pad(5f).row();
+                    button("重新生成噪声", () -> {
+                        try {
+                            int newSeed = Integer.parseInt(seedField.getText());
+                            float newScale = scaleSlider.getValue();
+                            int newOctaves = (int)octavesSlider.getValue();
+                            double newPersistence = persistenceSlider.getValue();
+
+                            Log.info("[OE][Debug] 柏林噪声：种子: "+seedField.getText()+", 缩放: "+scaleSlider.getValue()+", 层数: "+octavesSlider.getValue()+", 持久度: "+persistenceSlider.getValue());
+
+                            if (noiseElement != null) {
+                                noiseElement.regenerate(newSeed, newScale, newOctaves, newPersistence);
+                            }
+                        } catch (NumberFormatException e) {
+
                         }
-                    } catch (NumberFormatException e) {
+                    }).size(90f, 50f).pad(10f).row();
+                }
+            };
+            Table weather = new Table() {
+                @Override
+                public void draw() {
+                    super.draw();
 
-                    }
-                }).size(150f, 40f).pad(10f).row();
-            }};
-            container.addChild(noise);
-            Table weather = new Table(){{
+                    float centerX = getX(Align.center);
+                    float centerY = getY(Align.center);
+
+                    float leftBottomX = -150f;
+                    float leftBottomY = -260f;
+                    float rightTopX = 190f;
+                    float rightTopY = 360f;
+
+                    float actualLeftBottomX = centerX + leftBottomX;
+                    float actualLeftBottomY = centerY + leftBottomY;
+                    float actualRightTopX = centerX + rightTopX;
+                    float actualRightTopY = centerY + rightTopY;
+
+                    float width = actualRightTopX - actualLeftBottomX;
+                    float height = actualRightTopY - actualLeftBottomY;
+
+                    Draw.color(techBlue);
+                    Lines.stroke(2f);
+                    Lines.rect(actualLeftBottomX, actualLeftBottomY, width, height);
+                    Draw.reset();
+                }
+                {
                 TextField time;
+                Color borderColor = techBlue;
+                float borderThickness = 2f;
+                float padding = 0f;
 
-                OEUITools.setRelativeBounds(this,0f,0f,0f,0f);// 调整位置
+                float x = getX(0) - padding;
+                float y = getY(0) - padding;
+                float width = getWidth() + padding * 2;
+                float height = getHeight() + padding * 2;
+                Draw.color(borderColor);
+                Lines.stroke(borderThickness);
+                Lines.rect(x, y, width, height);
+                Draw.reset();
+
+                OEUITools.setRelativeBounds(this,-0.3f,0f,0f,0f);// 调整位置
                 add(new Label("天气控制器")).color(techBlue).padTop(20f).row();
                 add(new Label("持续时间(s):")).left().padLeft(10f);
                 add(time = new TextField("30"){{setMaxLength(10);}}).width(100f).pad(5f).row();
-                button("晴天", () -> {mods.getScripts().runConsole("Groups.weather.each(w => w.remove());");}).width(100f).pad(5f).row();
-                button("雨天", () -> {mods.getScripts().runConsole("Vars.content.getByName(ContentType.weather, 'rain').create(1.0, "+String.valueOf(60 * Integer.parseInt(time.getText()))+")");}).width(100f).pad(5f).row();
+                button("晴天  ", () -> {mods.getScripts().runConsole("Groups.weather.each(w => w.remove());");}).width(100f).pad(5f).row();
+                button("雪天  ", () -> {mods.getScripts().runConsole("Vars.content.getByName(ContentType.weather, 'snowing').create(1.0, "+String.valueOf(60 * Integer.parseInt(time.getText()))+")");}).width(100f).pad(5f).row();
+                button("雨天  ", () -> {mods.getScripts().runConsole("Vars.content.getByName(ContentType.weather, 'rain').create(1.0, "+String.valueOf(60 * Integer.parseInt(time.getText()))+")");}).width(100f).pad(5f).row();
+                button("沙尘暴", () -> {mods.getScripts().runConsole("Vars.content.getByName(ContentType.weather, 'sandstorm').create(1.0, "+String.valueOf(60 * Integer.parseInt(time.getText()))+")");}).width(100f).pad(5f).row();
+                button("孢子雨", () -> {mods.getScripts().runConsole("Vars.content.getByName(ContentType.weather, 'sporestorm').create(1.0, "+String.valueOf(60 * Integer.parseInt(time.getText()))+")");}).width(100f).pad(5f).row();
+                button("雾    ", () -> {mods.getScripts().runConsole("Vars.content.getByName(ContentType.weather, 'fog').create(1.0, "+String.valueOf(60 * Integer.parseInt(time.getText()))+")");}).width(100f).pad(5f).row();
+                button("粒子  ", () -> {mods.getScripts().runConsole("Vars.content.getByName(ContentType.weather, 'suspend-particles').create(1.0, "+String.valueOf(60 * Integer.parseInt(time.getText()))+")");}).width(100f).pad(5f).row();
             }};
+            Table objRender = new Table() {
+                @Override
+                public void draw() {
+                    super.draw();
+
+                    float centerX = getX(Align.center);
+                    float centerY = getY(Align.center);
+
+                    float leftBottomX = -150f;
+                    float leftBottomY = -260f;
+                    float rightTopX = 190f;
+                    float rightTopY = 360f;
+
+                    float actualLeftBottomX = centerX + leftBottomX;
+                    float actualLeftBottomY = centerY + leftBottomY;
+                    float actualRightTopX = centerX + rightTopX;
+                    float actualRightTopY = centerY + rightTopY;
+
+                    float width = actualRightTopX - actualLeftBottomX;
+                    float height = actualRightTopY - actualLeftBottomY;
+
+                    Draw.color(techBlue);
+                    Lines.stroke(2f);
+                    Lines.rect(actualLeftBottomX, actualLeftBottomY, width, height);
+                    Draw.reset();
+                }
+                {
+                    // 创建OBJ渲染器
+                    OBJRenderer objRenderer = new OBJRenderer();
+                    TextField pathField;
+                    Slider rotXSlider, rotYSlider, rotZSlider, scaleSlider;
+                    TextField rotXField, rotYField, rotZField, scaleField;
+
+                    OEUITools.setRelativeBounds(this,0.1f,0f,0f,0f);
+
+                    // 标题
+                    add(new Label("OBJ模型渲染器")).color(techBlue).padTop(20f).row();
+
+                    // 创建渲染区域
+                    Table renderArea = new Table();
+                    renderArea.background(Styles.black6);
+                    renderArea.add(objRenderer).size(200f, 200f);
+                    add(renderArea).pad(5f).row();
+
+                    // 文件路径输入
+                    Table pathRow = new Table();
+                    pathRow.add(new Label("OBJ路径:")).width(60f).padRight(5f);
+                    pathRow.add(pathField = new TextField(""){{setMessageText("输入OBJ文件路径");}}).width(150f);
+                    pathRow.button("加载模型", () -> {
+                        String path = pathField.getText();
+                        if(!path.isEmpty()) {
+                            objRenderer.loadOBJ(path);
+                        }
+                    }).size(120f, 35f).pad(5f).row();
+                    add(pathRow).pad(5f).row();
+
+                    // 旋转控制
+                    add(new Label("旋转控制")).color(techBlue).width(60f).padRight(5f).padTop(10f).row();
+
+                    // X旋转
+                    Table rotXRow = new Table();
+                    rotXRow.defaults().pad(2f);
+                    rotXRow.add(new Label("X:")).width(60f).padRight(10f);
+                    rotXRow.add(rotXSlider = new Slider(-180f, 180f, 1f, false){{
+                        setValue(0f);
+                    }}).width(100f);
+                    rotXField = new TextField("0"){{
+                        setMessageText("角度");
+                        setMaxLength(6);
+                    }};
+                    rotXRow.add(rotXField).width(100f).padLeft(5f);
+                    add(rotXRow).pad(3f).row();
+
+                    // Y旋转
+                    Table rotYRow = new Table();
+                    rotYRow.defaults().pad(2f);
+                    rotYRow.add(new Label("Y:")).width(60f).padRight(10f);
+                    rotYRow.add(rotYSlider = new Slider(-180f, 180f, 1f, false){{
+                        setValue(0f);
+                    }}).width(100f);
+                    rotYField = new TextField("0"){{
+                        setMessageText("角度");
+                        setMaxLength(6);
+                    }};
+                    rotYRow.add(rotYField).width(100f).padLeft(5f);
+                    add(rotYRow).pad(3f).row();
+
+                    // Z旋转
+                    Table rotZRow = new Table();
+                    rotZRow.defaults().pad(2f);
+                    rotZRow.add(new Label("Z:")).width(60f).padRight(10f);
+                    rotZRow.add(rotZSlider = new Slider(-180f, 180f, 1f, false){{
+                        setValue(0f);
+                    }}).width(100f);
+                    rotZField = new TextField("0"){{
+                        setMessageText("角度");
+                        setMaxLength(6);
+                    }};
+                    rotZRow.add(rotZField).width(100f).padLeft(5f);
+                    add(rotZRow).pad(3f).row();
+
+                    // 缩放控制
+                    Table scaleRow = new Table();
+                    scaleRow.defaults().pad(2f);
+                    scaleRow.add(new Label("缩放:")).width(60f).padRight(10f);
+                    scaleRow.add(scaleSlider = new Slider(0.1f, 30f, 0.1f, false){{
+                        setValue(1f);
+                    }}).width(100f);
+                    scaleField = new TextField("1.0"){{
+                        setMessageText("倍数");
+                        setMaxLength(5);
+                    }};
+                    scaleRow.add(scaleField).width(100f).padLeft(5f);
+                    add(scaleRow).pad(3f).row();
+
+                    // 滑块变化时，只更新文本框（单向）
+                    rotXSlider.changed(() -> {
+                        rotXField.setText(String.format("%.1f", rotXSlider.getValue()));
+                    });
+
+                    rotYSlider.changed(() -> {
+                        rotYField.setText(String.format("%.1f", rotYSlider.getValue()));
+                    });
+
+                    rotZSlider.changed(() -> {
+                        rotZField.setText(String.format("%.1f", rotZSlider.getValue()));
+                    });
+
+                    scaleSlider.changed(() -> {
+                        scaleField.setText(String.format("%.2f", scaleSlider.getValue()));
+                    });
+
+                    // 应用旋转和缩放按钮
+                    Table controlButtons = new Table();
+                    controlButtons.defaults().size(60f, 25f).pad(2f);
+
+                    controlButtons.button("应用", () -> {
+                        // 从文本框读取值并设置到滑块
+                        try {
+                            float xVal = Float.parseFloat(rotXField.getText());
+                            if (xVal >= -180f && xVal <= 180f) {
+                                rotXSlider.setValue(xVal);
+                            } else {
+                                rotXField.setText(String.format("%.1f", rotXSlider.getValue()));
+                            }
+                        } catch (NumberFormatException e) {
+                            rotXField.setText(String.format("%.1f", rotXSlider.getValue()));
+                        }
+
+                        try {
+                            float yVal = Float.parseFloat(rotYField.getText());
+                            if (yVal >= -180f && yVal <= 180f) {
+                                rotYSlider.setValue(yVal);
+                            } else {
+                                rotYField.setText(String.format("%.1f", rotYSlider.getValue()));
+                            }
+                        } catch (NumberFormatException e) {
+                            rotYField.setText(String.format("%.1f", rotYSlider.getValue()));
+                        }
+
+                        try {
+                            float zVal = Float.parseFloat(rotZField.getText());
+                            if (zVal >= -180f && zVal <= 180f) {
+                                rotZSlider.setValue(zVal);
+                            } else {
+                                rotZField.setText(String.format("%.1f", rotZSlider.getValue()));
+                            }
+                        } catch (NumberFormatException e) {
+                            rotZField.setText(String.format("%.1f", rotZSlider.getValue()));
+                        }
+
+                        try {
+                            float scaleVal = Float.parseFloat(scaleField.getText());
+                            if (scaleVal >= 0.1f && scaleVal <= 3f) {
+                                scaleSlider.setValue(scaleVal);
+                            } else {
+                                scaleField.setText(String.format("%.2f", scaleSlider.getValue()));
+                            }
+                        } catch (NumberFormatException e) {
+                            scaleField.setText(String.format("%.2f", scaleSlider.getValue()));
+                        }
+
+                        // 应用旋转和缩放
+                        float x = rotXSlider.getValue() * Mathf.degRad;
+                        float y = rotYSlider.getValue() * Mathf.degRad;
+                        float z = rotZSlider.getValue() * Mathf.degRad;
+                        objRenderer.setRotation(x, y, z);
+                        objRenderer.setScale(scaleSlider.getValue());
+                    });
+
+                    controlButtons.button("重置", () -> {
+                        rotXSlider.setValue(0f);
+                        rotYSlider.setValue(0f);
+                        rotZSlider.setValue(0f);
+                        scaleSlider.setValue(1f);
+
+                        rotXField.setText("0.0");
+                        rotYField.setText("0.0");
+                        rotZField.setText("0.0");
+                        scaleField.setText("1.00");
+
+                        objRenderer.setRotation(0f, 0f, 0f);
+                        objRenderer.setScale(1f);
+                    });
+
+                    add(controlButtons).pad(5f).row();
+
+                    // 显示模式切换
+                    Table modeButtons = new Table();
+                    modeButtons.defaults().size(70f, 25f).pad(2f);
+
+                    modeButtons.button("线框", () -> {
+                        objRenderer.setWireframe(true);
+                    });
+
+                    modeButtons.button("填充", () -> {
+                        objRenderer.setWireframe(false);
+                    });
+
+                    add(modeButtons).pad(5f);
+
+                    // 初始化应用旋转
+                    objRenderer.setRotation(0f, 0f, 0f);
+                }
+            };
+            Table temp = new Table() {{
+                this.button("启动", () -> {
+                }).size(120f, 35f).pad(5f).row();
+            }};
+
+            container.addChild(noise);
             container.addChild(weather);
+            container.addChild(objRender);
+            container.addChild(temp);
 
             cont.add(container);
+
         }
     }
 }

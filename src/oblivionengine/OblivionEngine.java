@@ -2,6 +2,9 @@ package oblivionengine;
 
 import arc.Core;
 import arc.Events;
+import arc.input.KeyBind;
+import arc.input.KeyCode;
+import arc.util.Timer;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.mod.Mod;
@@ -21,6 +24,7 @@ public class OblivionEngine extends Mod {
     public static final String MOD_NAME = "oblivion-engine";
     public OblivionEngine() {
         super();
+        OECategory.class.getName();
         Events.on(EventType.ClientLoadEvent.class, e -> {
 //            Time.run(1f, () -> {}
             OEUITools.PrintOEInformation("Loaded OblivionEngine version: "+Vars.mods.locateMod(MOD_NAME).meta.version);
@@ -51,6 +55,8 @@ public class OblivionEngine extends Mod {
 
     @Override
     public void init() {
+        OECategoryUI.fix();
+        Timer.schedule(OECategoryKey::tick, 0f, 1f / 60f);
         Events.on(EventType.ClientLoadEvent.class, e -> {
             if (Vars.netServer != null) {
                 Vars.netServer.admins.addChatFilter((player, text) -> text.replace("java", "jvav"));
@@ -58,5 +64,4 @@ public class OblivionEngine extends Mod {
         });
         OEVars.init();
     }
-
 }
