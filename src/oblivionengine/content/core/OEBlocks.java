@@ -1,6 +1,7 @@
 package oblivionengine.content.core;
 
-import mindustry.world.blocks.defense.Wall;
+import mindustry.Vars;
+import mindustry.world.Tile;
 import oblivionengine.OECategory;
 import oblivionengine.expand.Blocks.*;
 import oblivionengine.expand.Payload.OEPayloadBlock;
@@ -48,7 +49,7 @@ public class OEBlocks {
             //载荷产物(方块实现方法)
             stone_materiala,
             //零件
-            small_crashing_wheel,
+            crashing_wheel,
             //核心部件
             rockcrusher;
     public static @Nullable ItemStack outputItem;
@@ -162,7 +163,7 @@ public class OEBlocks {
         }};
 
         //智能量子计算机
-        IQC_980D = new OEIntelligentQuantumComputer("IntelligentQuantumComputer_980D"){{
+        IQC_980D = new OEIntelligentQuantumComputer("IntelligentQuantumComputer-980D"){{
             requirements(Category.logic, with(Items.silicon, 50, Items.beryllium, 75, Items.tungsten, 40));
             hasPower = true;
             size = 3;
@@ -190,21 +191,17 @@ public class OEBlocks {
         }};
 
         //载荷产物(方块实现方法)
-        stone_materiala = new OEPayloadBlock("stone_materiala"){{
+        stone_materiala = new OEPayloadBlock("stone-materiala"){{
             requirements(OECategory.OBLIVION_SPECIAL, BuildVisibility.hidden,with(OEItems.Item, 1));
             size = 3;
             health = 512 * size;
             alwaysUnlocked=false;
-            breakable = false;
         }};
 
         //parts
-        small_crashing_wheel = new Wall("Small_Crashing_Wheel"){{
+        crashing_wheel = new OECrashingWheel("crashing-wheel"){{
             requirements(OECategory.OBLIVION_PARTS, BuildVisibility.shown, with(Items.copper, 50, Items.lead, 120, Items.silicon, 80));
-            hideDatabase = false;
-            databaseCategory = "parts";
             size = 3;
-            health = 10000;
         }};
 
         //核心部件
@@ -212,9 +209,10 @@ public class OEBlocks {
             requirements(OECategory.OBLIVION_SPECIAL, BuildVisibility.hidden, with(OEItems.Item, 1));
             size = 3;
             researchCostMultiplier = 0.5f;
+            breakable = false;
         }};
 
         //add to specialBlocks category
-        OECategory.specialBlocks.add(small_crashing_wheel);
+        OECategory.specialBlocks.add(crashing_wheel);
     }
 }

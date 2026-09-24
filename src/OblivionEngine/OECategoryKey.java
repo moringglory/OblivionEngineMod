@@ -6,14 +6,22 @@ import arc.input.KeyCode;
 
 public class OECategoryKey {
     public static final KeyBind oeSelectPart = KeyBind.add("oe-select-part", KeyCode.num1, "oblivion-engine");
+    public static final KeyBind oeSelectSpecial = KeyBind.add("oe-select-special", KeyCode.num8, "oblivion-engine");
 
-    private static boolean wasDown = false;
+    private static boolean wasDownPart = false;
+    private static boolean wasDownSpecial = false;
 
     public static void tick() {
-        boolean now = Core.input.keyDown(oeSelectPart);
-        if (now && !wasDown) {
+        boolean nowPart = Core.input.keyDown(oeSelectPart);
+        if (nowPart && !wasDownPart) {
             OECategoryUI.openParts();
         }
-        wasDown = now;
+        wasDownPart = nowPart;
+
+        boolean nowSpecial = Core.input.keyDown(oeSelectSpecial);
+        if (nowSpecial && !wasDownSpecial) {
+            OECategoryUI.openSpecial();
+        }
+        wasDownSpecial = nowSpecial;
     }
 }

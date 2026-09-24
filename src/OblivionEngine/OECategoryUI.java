@@ -63,6 +63,24 @@ public class OECategoryUI {
         }
     }
 
+    public static void openSpecial() {
+        try {
+            if (Vars.ui == null || Vars.ui.hudfrag == null) return;
+            Object frag = Vars.ui.hudfrag.blockfrag;
+            if (frag == null) return;
+
+            Field f = frag.getClass().getDeclaredField("currentCategory");
+            f.setAccessible(true);
+            f.set(frag, OECategory.OBLIVION_SPECIAL);
+
+            Method m = frag.getClass().getDeclaredMethod("rebuild");
+            m.setAccessible(true);
+            m.invoke(frag);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
     private static void tryDatabaseButton() {
         try {
             if (Vars.ui == null) return;

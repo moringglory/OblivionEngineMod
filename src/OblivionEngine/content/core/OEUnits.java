@@ -27,7 +27,7 @@ public class OEUnits {
 
 
     public static void load(){
-        depleted_uranium = new UnitType("depleted_uranium") {
+        depleted_uranium = new UnitType("depleted-uranium") {
             {
                 health = 11f;
                 speed = 0f;
