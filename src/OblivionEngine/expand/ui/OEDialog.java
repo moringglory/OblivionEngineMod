@@ -1,5 +1,7 @@
 package oblivionengine.expand.ui;
 
+import mindustry.type.Category;
+import oblivionengine.OECategory;
 import oblivionengine.content.OEColor;
 import oblivionengine.content.OENoise;
 import oblivionengine.content.OEStyle;
@@ -34,6 +36,8 @@ import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
 import mindustry.ui.fragments.MenuFragment;
 
+import java.lang.reflect.Field;
+
 import static oblivionengine.content.OEColor.techBlue;
 import static mindustry.Vars.*;
 import static mindustry.ui.dialogs.PlanetDialog.Mode.look;
@@ -45,79 +49,263 @@ public class OEDialog {
     }
 
     public static void load() {//这是添加触发到已有按钮中
-        Vars.ui.settings.addCategory("@oblivine-engine.setting", Icon.settings, Table::clearChildren);
-//        ui.settings.buttons.button("@oblivine-engine.OEDebugPanelDialog", Icon.settings, () -> {OEUI.debugpannel.show();});
+        ui.settings.addCategory("@oblivine-engine.setting", Icon.settings, table -> {
+            table.checkPref("@oblivine-engine.DebugSwitch", false);
+//            table.sliderPref("oe-particles", 50, 0, 100, 5, i -> i + "%");
+//            table.textPref("oe-server", "127.0.0.1");
+        });
+//        ui.settings.buttons.button("@oblivine-engine.OEDebugPanelDialog", Icon.settings, () -> {OEUI.debugpanel.show();});
     }
 
     public static class OEUI implements ApplicationListener {
+        private static Table cachedBlockCatTable, cachedCategories, customCategories = null;
         public static BaseDialog m_theorem = new TheoremDialog();
         public static BaseDialog IQC = new IQCdialog();
         public static BaseDialog exportOverview = new PlanetPreviewDialog();
         public static BaseDialog debugpanel = new OEDebugPanelDialog();
         boolean added;
 
-        @Override
-        public void init() {
+        private static void addOEUI() {
             Events.on(EventType.ClientLoadEvent.class, e -> {
-//                Vars.ui.menuGroup.fill(c -> {OEUITools.setRelativeBounds(c,-0.85f,0f,0.05f,0.02f);c.button("@oblivine-engine.OEDebugPanelDialog",Icon.bookOpen, () -> {OEUI.debugpanel.show();});});// 调试界面
-                Core.scene.add(new Table(){{OEUITools.setRelativeBounds(this,0.1f,0.8f,0f,0f); button("@oblivine-engine.OEDebugPanelDialog",Icon.bookOpen, () -> {OEUI.debugpanel.show();});}});
+                ui.menuGroup.fill(c -> {OEUITools.setRelativeBounds(c,-0.85f,0f,0.05f,0.02f);c.button("@oblivine-engine.OEDebugPanelDialog",Icon.bookOpen, () -> {OEUI.debugpanel.show();});});
 
-//                for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
-//                    if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
-//                        Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();
-//
-//                        for (MenuFragment.MenuButton subButton : button.submenu) {
-//                            if (!"@database".equals(subButton.text)) {  // 跳过 @database
-//                                newSubmenu.add(subButton);
-//                            }
-//                        }
-//                        MenuFragment.MenuButton newDatabaseButton = new MenuFragment.MenuButton(
-//                                "@database.button",
-//                                Icon.menu,
-//                                () -> {
-//                                },
-//                                newSubmenu.toArray(MenuFragment.MenuButton.class)
-//                        );
-//                        int index = ui.menufrag.desktopButtons.indexOf(button);
-//                        ui.menufrag.desktopButtons.set(index, newDatabaseButton);
-//                        break;
-//                    }
-//                }
-//                for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
-//                    if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
-//                        Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();// 找到 database.button 的 submenu
-//                        for (MenuFragment.MenuButton subButton : button.submenu) {// 遍历原有子菜单
-//                            newSubmenu.add(subButton);// 添加原有按钮
-//                            if ("@schematics".equals(subButton.text)) {// 在 @schematics 之后添加自定义按钮
-//                                newSubmenu.add(new MenuFragment.MenuButton("@theorem", Icon.bookOpen, () -> {
-//                                    m_theorem.show();
-//                                }));
-//                                newSubmenu.add(new MenuFragment.MenuButton("@boot.IQC", Icon.commandAttack, () -> {
-//                                    IQC.show();
-//                                }));
-//                            }
-//                        }
-//                        MenuFragment.MenuButton newDatabaseButton = new MenuFragment.MenuButton(// 创建新的 database.button
-//                                "@database.button",
-//                                Icon.menu,
-//                                () -> {
-//                                },  // 主按钮点击事件（通常为空）
-//                                newSubmenu.toArray(MenuFragment.MenuButton.class)
-//                        );
-//                        boolean menuadded = false;
-//                        if (!menuadded) {
-//                            menuadded = true;
-//                            int index = ui.menufrag.desktopButtons.indexOf(button);// 替换原有的 database.button
-//                            ui.menufrag.desktopButtons.set(index, newDatabaseButton);
-//                        }
-//                        break;
-//                    }
-//                }
+                for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
+                    if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
+                        Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();
+
+                        for (MenuFragment.MenuButton subButton : button.submenu) {
+                            if (!"@database".equals(subButton.text)) {
+                                newSubmenu.add(subButton);
+                            }
+                        }
+                        MenuFragment.MenuButton newDatabaseButton = new MenuFragment.MenuButton(
+                                "@database.button",
+                                Icon.menu,
+                                () -> {
+                                },
+                                newSubmenu.toArray(MenuFragment.MenuButton.class)
+                        );
+                        int index = ui.menufrag.desktopButtons.indexOf(button);
+                        ui.menufrag.desktopButtons.set(index, newDatabaseButton);
+                        break;
+                    }
+                }
+                for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
+                    if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
+                        Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();
+                        for (MenuFragment.MenuButton subButton : button.submenu) {
+                            newSubmenu.add(subButton);
+                            if ("@schematics".equals(subButton.text)) {
+                                newSubmenu.add(new MenuFragment.MenuButton("@theorem", Icon.bookOpen, () -> {
+                                    m_theorem.show();
+                                }));
+                                newSubmenu.add(new MenuFragment.MenuButton("@boot.IQC", Icon.commandAttack, () -> {
+                                    IQC.show();
+                                }));
+                            }
+                        }
+                        MenuFragment.MenuButton newDatabaseButton = new MenuFragment.MenuButton(
+                                "@database.button",
+                                Icon.menu,
+                                () -> {
+                                },
+                                newSubmenu.toArray(MenuFragment.MenuButton.class)
+                        );
+                        boolean menuadded = false;
+                        if (!menuadded) {
+                            menuadded = true;
+                            int index = ui.menufrag.desktopButtons.indexOf(button);
+                            ui.menufrag.desktopButtons.set(index, newDatabaseButton);
+                        }
+                        break;
+                    }
+                }
             });
         }
 
+        public static Table getCachedBlockCatTable() {
+            Object frag = ui.hudfrag.blockfrag;
+
+            Class<?> clazz = frag.getClass();
+            Field f = null;
+            try {
+                f = clazz.getDeclaredField("blockCatTable");
+            } catch (NoSuchFieldException err) {
+                throw new RuntimeException(err);
+            }
+            f.setAccessible(true);
+            try {
+                cachedBlockCatTable = (Table) f.get(frag);
+            } catch (IllegalAccessException err) {
+                throw new RuntimeException(err);
+            }
+            return null;
+        }
+
+        public static Table getCachedCategoriesTable() {
+            try {
+                Object frag = ui.hudfrag.blockfrag;
+                if (frag == null) return null;
+
+                Field f1 = frag.getClass().getDeclaredField("blockCatTable");
+                f1.setAccessible(true);
+                Table blockCatTable = (Table) f1.get(frag);
+                if (blockCatTable == null) return null;
+
+                for (Element e : blockCatTable.getChildren()) {
+                    if (e instanceof Table t) {
+                        for (Element child : t.getChildren()) {
+                            if (child.name != null && child.name.startsWith("category-")) {
+                                return t;
+                            }
+                        }
+                    }
+                }
+                return null;
+            } catch (Throwable t) {
+                return null;
+            }
+        }
+
+        public static void rebuildCategories() {
+            try {
+                Object frag = Vars.ui.hudfrag.blockfrag;
+                if (frag == null) return;
+
+                Field f = frag.getClass().getDeclaredField("blockCatTable");
+                f.setAccessible(true);
+                Table blockCatTable = (Table) f.get(frag);
+                if (blockCatTable == null) return;
+
+                cachedBlockCatTable = blockCatTable;
+
+                Table blocksSelect = null;
+                for (Element e : blockCatTable.getChildren()) {
+                    if (e instanceof Table t && t != customCategories) {
+                        blocksSelect = t;
+                        break;
+                    }
+                }
+
+                blockCatTable.clearChildren();
+
+                if (blocksSelect != null) {
+                    blockCatTable.add(blocksSelect).fillY().bottom().touchable(Touchable.enabled);
+                }
+
+                if (customCategories != null) {
+                    customCategories.clearChildren();
+                }
+
+                customCategories = new Table();
+                customCategories.background(Styles.black6);
+                customCategories.top();
+                customCategories.touchable = Touchable.enabled;
+                customCategories.visible = true;
+                customCategories.defaults().size(50f);
+
+                blockCatTable.add(customCategories).fillY().bottom().touchable(Touchable.enabled);
+
+                blockCatTable.invalidate();
+            } catch (Throwable t) {
+                arc.util.Log.err("[OE] rebuildCategories failed", t);
+            }
+        }
+
+        public static void addCategory(Category cat) {
+            if (customCategories == null) {
+                arc.util.Log.err("[OE] call clearCategories() first");
+                return;
+            }
+
+            Object frag = Vars.ui.hudfrag.blockfrag;
+
+            customCategories.button(
+                    Vars.ui.getIcon(cat.name()),
+                    Styles.clearTogglei,
+                    () -> {
+                        try {
+                            Field cf = frag.getClass().getDeclaredField("currentCategory");
+                            cf.setAccessible(true);
+                            cf.set(frag, cat);
+                        } catch (Throwable ignored) {}
+
+                        ((mindustry.ui.fragments.PlacementFragment) frag).rebuild();
+                    }
+            ).update(i -> {
+                try {
+                    Field cf = frag.getClass().getDeclaredField("currentCategory");
+                    cf.setAccessible(true);
+                    i.setChecked(cf.get(frag) == cat);
+                } catch (Throwable ignored) {}
+            }).name("category-" + cat.name()).size(50f);
+        }
+
+        public static void nextCategoryRow() {
+            if (customCategories != null) customCategories.row();
+        }
+
+        private static void buildCustomCategories() {
+            OEUI.rebuildCategories();
+            OEUI.addCategory(Category.turret);
+            OEUI.addCategory(Category.production);
+            OEUI.addCategory(Category.distribution);
+            OEUI.nextCategoryRow();
+            OEUI.addCategory(Category.liquid);
+            OEUI.addCategory(Category.power);
+            OEUI.addCategory(Category.defense);
+            OEUI.nextCategoryRow();
+            OEUI.addCategory(Category.crafting);
+            OEUI.addCategory(Category.units);
+            OEUI.addCategory(Category.effect);
+            OEUI.nextCategoryRow();
+            OEUI.addCategory(Category.logic);
+            OEUI.addCategory(OECategory.parts);
+        }
+
+        @Override
+        public void init() {
+            getCachedBlockCatTable();
+            getCachedCategoriesTable();
+
+            addOEUI();
+        }
+
+        private static Table debugPanelBtn = null;
+
         @Override
         public void update() {
+            boolean want = Core.settings.getBool("@oblivine-engine.DebugSwitch", false);
+
+            if (ui.hudfrag != null && ui.hudfrag.blockfrag != null) {
+                try {
+                    Field f = ui.hudfrag.blockfrag.getClass().getDeclaredField("blockCatTable");
+                    f.setAccessible(true);
+                    Table bct = (Table) f.get(ui.hudfrag.blockfrag);
+                    if (bct != null) {
+                        boolean present = customCategories != null
+                                && customCategories.parent == bct
+                                && customCategories.getChildren().size > 0;
+                        if (!present) {
+                            buildCustomCategories();
+                        }
+                    }
+                } catch (Throwable ignored) {}
+            }
+
+            if (want && debugPanelBtn == null) {
+                debugPanelBtn = new Table() {{
+                    OEUITools.setRelativeBounds(this, 0.1f, 0.8f, 0f, 0f);
+                    button("@oblivine-engine.OEDebugPanelDialog", Icon.bookOpen, () -> {
+                        OEUI.debugpanel.show();
+                    });
+                }};
+                Core.scene.add(debugPanelBtn);
+            } else if (!want && debugPanelBtn != null) {
+                debugPanelBtn.remove();
+                debugPanelBtn = null;
+            }
+
             if (ui.planet != null) {
                 ui.planet.shown(() -> {
                     added = false;
@@ -151,7 +339,7 @@ public class OEDialog {
                 @Override
                 public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
                     if (event.targetActor == PlanetPreviewDialog.this) {
-                        scaling = Mathf.clamp(scaling - amountY / 3, Mathf.log(2, 10 / Vars.ui.planet.state.planet.solarSystem.totalRadius), Mathf.log(2, 20f));
+                        scaling = Mathf.clamp(scaling - amountY / 3, Mathf.log(2, 10 / ui.planet.state.planet.solarSystem.totalRadius), Mathf.log(2, 20f));
                     }
                     return true;
                 }
@@ -188,8 +376,8 @@ public class OEDialog {
             cam.resize(Core.graphics.getWidth() / Mathf.pow(2, scaling),
                     Core.graphics.getHeight() / Mathf.pow(2, scaling));
             Draw.proj(cam);
-            Vars.content.planets().each(p -> {
-                if (!(p.solarSystem == Vars.ui.planet.state.planet.solarSystem)) return;
+            content.planets().each(p -> {
+                if (!(p.solarSystem == ui.planet.state.planet.solarSystem)) return;
                 if (p.accessible || p.solarSystem == p) {
                     if (p.parent != null && p.drawOrbit) {
                         Draw.color(Pal.gray);

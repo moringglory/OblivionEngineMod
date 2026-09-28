@@ -1,7 +1,9 @@
 package oblivionengine.expand.Blocks;
 
 import arc.graphics.g2d.Draw;
+import arc.util.Time;
 import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.world.Tile;
@@ -53,10 +55,27 @@ public class OECrashingWheel extends OEParts {
         }
 
         @Override
-        public void dead(boolean dead) {
-            super.dead(dead);
+        public void onDestroyed() {
+            super.onDestroyed();
 
+            int tx = tileX();
+            int ty = tileY();
+            int[] dx = {6, 0, -6, 0};
+            int[] dy = {0, 6, 0, -6};
+            int[] dx3 = {3, 0, -3, 0};
+            int[] dy3 = {0, 3, 0, -3};
+
+            for (int i = 0; i < 4; i++) {
+                Tile t = Vars.world.tile(tx + dx[i], ty + dy[i]);
+                if (t == null || t.build == null) continue;
+
+                if (t.build.block == OEBlocks.crashing_wheel) {
+                    OEUITools.PrintOEInformation("found crashing wheel");
+                    Vars.world.tile(tx + dx3[i], ty + dy3[i]).setBlock(Blocks.air);
+                }
+            }
         }
+
 
         @Override
         public void update() {

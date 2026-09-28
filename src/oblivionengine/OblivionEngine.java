@@ -2,12 +2,12 @@ package oblivionengine;
 
 import arc.Core;
 import arc.Events;
-import arc.input.KeyBind;
-import arc.input.KeyCode;
 import arc.util.Timer;
 import mindustry.Vars;
 import mindustry.game.EventType;
+import mindustry.gen.Player;
 import mindustry.mod.Mod;
+import mindustry.net.Net;
 import mindustry.ui.dialogs.BaseDialog;
 
 import oblivionengine.content.OEPlanets;
@@ -22,16 +22,16 @@ import oblivionengine.content.OEContent;
 
 public class OblivionEngine extends Mod {
     public static final String MOD_NAME = "oblivion-engine";
+
     public OblivionEngine() {
         super();
         OECategory.class.getName();
         Events.on(EventType.ClientLoadEvent.class, e -> {
-//            Time.run(1f, () -> {}
-            OEUITools.PrintOEInformation("Loaded OblivionEngine version: "+Vars.mods.locateMod(MOD_NAME).meta.version);
+            OEUITools.PrintOEInformation("Loaded OblivionEngine version: " + Vars.mods.locateMod(MOD_NAME).meta.version);
             BaseDialog dialog = new BaseDialog("Mod 已加载");
-            dialog.cont.image(Core.atlas.find("oblivion-engine-frog")).pad(20f).row();
+            dialog.cont.image(Core.atlas.find("oblivion-engine-parts")).pad(20f).row();
             dialog.cont.add("OblivionEngineMod 已成功加载！");
-            dialog.buttons.button("goon",()->{dialog.hide();}).size(100f,50f);
+            dialog.buttons.button("goon", () -> dialog.hide()).size(100f, 50f);
             dialog.show();
             dialog.closeOnBack();
         });
@@ -56,12 +56,10 @@ public class OblivionEngine extends Mod {
     @Override
     public void init() {
         OECategoryUI.fix();
+        OECategoryKey.register();
+        Timer.schedule(OECategoryUI::tick, 0f, 1f / 60f);
         Timer.schedule(OECategoryKey::tick, 0f, 1f / 60f);
-        Events.on(EventType.ClientLoadEvent.class, e -> {
-            if (Vars.netServer != null) {
-                Vars.netServer.admins.addChatFilter((player, text) -> text.replace("java", "jvav"));
-            }
-        });
+
         OEVars.init();
     }
 }

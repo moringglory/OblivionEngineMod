@@ -53,7 +53,7 @@ public class OECategoryUI {
 
             Field f = frag.getClass().getDeclaredField("currentCategory");
             f.setAccessible(true);
-            f.set(frag, OECategory.OBLIVION_PARTS);
+            f.set(frag, OECategory.parts);
 
             Method m = frag.getClass().getDeclaredMethod("rebuild");
             m.setAccessible(true);

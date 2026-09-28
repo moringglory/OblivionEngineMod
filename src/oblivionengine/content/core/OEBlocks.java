@@ -1,7 +1,5 @@
 package oblivionengine.content.core;
 
-import mindustry.Vars;
-import mindustry.world.Tile;
 import oblivionengine.OECategory;
 import oblivionengine.expand.Blocks.*;
 import oblivionengine.expand.Payload.OEPayloadBlock;
@@ -200,7 +198,7 @@ public class OEBlocks {
 
         //parts
         crashing_wheel = new OECrashingWheel("crashing-wheel"){{
-            requirements(OECategory.OBLIVION_PARTS, BuildVisibility.shown, with(Items.copper, 50, Items.lead, 120, Items.silicon, 80));
+            requirements(OECategory.parts, BuildVisibility.shown, with(Items.copper, 50, Items.lead, 120, Items.silicon, 80));
             size = 3;
         }};
 

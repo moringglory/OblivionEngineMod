@@ -11,17 +11,15 @@ public class OECategoryKey {
     private static boolean wasDownPart = false;
     private static boolean wasDownSpecial = false;
 
+    public static void register() {}
+
     public static void tick() {
         boolean nowPart = Core.input.keyDown(oeSelectPart);
-        if (nowPart && !wasDownPart) {
-            OECategoryUI.openParts();
-        }
+        if (nowPart && !wasDownPart) OECategoryUI.openParts();
         wasDownPart = nowPart;
 
         boolean nowSpecial = Core.input.keyDown(oeSelectSpecial);
-        if (nowSpecial && !wasDownSpecial) {
-            OECategoryUI.openSpecial();
-        }
+        if (nowSpecial && !wasDownSpecial) OECategoryUI.openSpecial();
         wasDownSpecial = nowSpecial;
     }
 }

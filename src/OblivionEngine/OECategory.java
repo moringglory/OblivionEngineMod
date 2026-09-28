@@ -9,12 +9,12 @@ import java.lang.reflect.Field;
 
 public class OECategory {
     public static Category OBLIVION_SPECIAL;
-    public static Category OBLIVION_PARTS;
+    public static Category parts;
     public static Seq<Block> specialBlocks = new Seq<>();
 
     static {
         OBLIVION_SPECIAL = addHiddenCategory("oblivion-special", Category.production.ordinal());
-        OBLIVION_PARTS = addHiddenCategory("oblivion-parts", Category.production.ordinal());
+        parts = addHiddenCategory("oblivion-parts", Category.production.ordinal());
     }
 
     private static Category addHiddenCategory(String name, int ordinal) {
