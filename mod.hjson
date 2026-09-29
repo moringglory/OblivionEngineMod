@@ -8,6 +8,8 @@ main: "oblivionengine.OblivionEngine"
 
 description: "[sky]Alpha OblivionEngine Ver:1.0.1"
 
+repo: "moringglory/Oblivion_Engine"
+
 version: beta_0.1.1.95
 
 minGameVersion: 157.1

@@ -58,7 +58,7 @@ public class OEDialog {
     }
 
     public static class OEUI implements ApplicationListener {
-        private static Table cachedBlockCatTable, cachedCategories, customCategories = null;
+        private static Table cachedBlockCatTable, cachedCategories, customCategories, lastBlockCatTable = null;
         public static BaseDialog m_theorem = new TheoremDialog();
         public static BaseDialog IQC = new IQCdialog();
         public static BaseDialog exportOverview = new PlanetPreviewDialog();
@@ -67,7 +67,7 @@ public class OEDialog {
 
         private static void addOEUI() {
             Events.on(EventType.ClientLoadEvent.class, e -> {
-                ui.menuGroup.fill(c -> {OEUITools.setRelativeBounds(c,-0.85f,0f,0.05f,0.02f);c.button("@oblivine-engine.OEDebugPanelDialog",Icon.bookOpen, () -> {OEUI.debugpanel.show();});});
+                if (ui.menufrag == null || ui.menufrag.desktopButtons == null) return;
 
                 for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
                     if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
@@ -220,8 +220,27 @@ public class OEDialog {
 
             Object frag = Vars.ui.hudfrag.blockfrag;
 
+            String name = cat.name();
+
+            arc.scene.style.Drawable iconDrawable = Icon.icons.get(name);
+
+            if (iconDrawable == null) {
+                String atlasPath = name.startsWith("oblivion-")
+                        ? "oblivion-engine-" + name.substring("oblivion-".length())
+                        : name;
+
+                arc.graphics.g2d.TextureRegion tr = Core.atlas.find(atlasPath);
+                if (tr.found()) {
+                    iconDrawable = new arc.scene.style.TextureRegionDrawable(tr);
+                }
+            }
+
+            if (iconDrawable == null) {
+                iconDrawable = Vars.ui.getIcon(name);
+            }
+
             customCategories.button(
-                    Vars.ui.getIcon(cat.name()),
+                    iconDrawable,
                     Styles.clearTogglei,
                     () -> {
                         try {
@@ -231,6 +250,8 @@ public class OEDialog {
                         } catch (Throwable ignored) {}
 
                         ((mindustry.ui.fragments.PlacementFragment) frag).rebuild();
+
+                        OEUI.buildCustomCategories();
                     }
             ).update(i -> {
                 try {
@@ -245,7 +266,7 @@ public class OEDialog {
             if (customCategories != null) customCategories.row();
         }
 
-        private static void buildCustomCategories() {
+        public static void buildCustomCategories() {
             OEUI.rebuildCategories();
             OEUI.addCategory(Category.turret);
             OEUI.addCategory(Category.production);
@@ -282,13 +303,9 @@ public class OEDialog {
                     Field f = ui.hudfrag.blockfrag.getClass().getDeclaredField("blockCatTable");
                     f.setAccessible(true);
                     Table bct = (Table) f.get(ui.hudfrag.blockfrag);
-                    if (bct != null) {
-                        boolean present = customCategories != null
-                                && customCategories.parent == bct
-                                && customCategories.getChildren().size > 0;
-                        if (!present) {
-                            buildCustomCategories();
-                        }
+                    if (bct != null && bct != lastBlockCatTable) {
+                        lastBlockCatTable = bct;
+                        buildCustomCategories();
                     }
                 } catch (Throwable ignored) {}
             }
