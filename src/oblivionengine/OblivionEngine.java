@@ -55,9 +55,7 @@ public class OblivionEngine extends Mod {
 
     @Override
     public void init() {
-        OECategoryUI.fix();
         OECategoryKey.register();
-        Timer.schedule(OECategoryUI::tick, 0f, 1f / 60f);
         Timer.schedule(OECategoryKey::tick, 0f, 1f / 60f);
 
         OEVars.init();
