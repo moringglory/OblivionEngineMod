@@ -8,7 +8,7 @@ main: "oblivionengine.OblivionEngine"
 
 description: "[sky]Alpha OblivionEngine Ver:1.0.1"
 
-repo: "moringglory/OblivineEngineMod"
+repo: "yourname/OblivionEngine"
 
 version: beta_0.1.1.95
 
