@@ -7,7 +7,7 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/Anuken/Mindustry/v160/13d3ef8a5c9a1a6dcdf316a9e0f18f37d67ddae2/Mindustry-v160.jar" />
         </processorPath>
-        <module name="OblivineEngineMod.main" />
+        <module name="OblivionEngineMod.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17" />

@@ -102,7 +102,7 @@ tasks.register('runOnClient') {
     dependsOn "deploy"
     doLast {
         delete {
-            delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}Desktop.jar"
+             delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}Desktop.jar"
             delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}Desktop.zip"
         }
         copy {

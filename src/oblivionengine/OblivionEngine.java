@@ -27,7 +27,7 @@ public class OblivionEngine extends Mod {
         super();
         OECategory.class.getName();
         Events.on(EventType.ClientLoadEvent.class, e -> {
-            OEUITools.PrintOEInformation("Loaded OblivionEngine version: " + Vars.mods.locateMod(MOD_NAME).meta.version);
+            OEUITools.PrintOEInformation("Loaded oblivionengine version: " + Vars.mods.locateMod(MOD_NAME).meta.version);
             BaseDialog dialog = new BaseDialog("Mod 已加载");
             dialog.cont.image(Core.atlas.find("oblivion-engine-parts")).pad(20f).row();
             dialog.cont.add("OblivionEngineMod 已成功加载！");
