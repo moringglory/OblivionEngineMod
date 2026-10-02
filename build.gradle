@@ -36,7 +36,7 @@ java {
 }
 
 ext {
-    mindustryVersion = "v160"
+    mindustryVersion = "v160.5"
     isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
 }
@@ -102,30 +102,13 @@ tasks.register('runOnClient') {
     dependsOn "deploy"
     doLast {
         delete {
-             delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}Desktop.jar"
-            delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}Desktop.zip"
+            delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}.jar"
+            delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}.zip"
         }
         copy {
             from "$buildDir/libs"
             into "C:/Users/user/AppData/Roaming/Mindustry/mods"
-            include "${project.archivesBaseName}Desktop.jar"
-        }
-        exec {
-            commandLine 'java', '-jar', '"C:/Users/user/Desktop/MindustryX-2026.05.X35-Desktop.jar"'
-        }
-    }
-}
-
-tasks.register('Client') {
-    doLast {
-        delete {
-            delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}Desktop.jar"
-            delete "C:/Users/user/AppData/Roaming/Mindustry/mods/${project.archivesBaseName}Desktop.zip"
-        }
-        copy {
-            from "$buildDir/libs"
-            into "C:/Users/user/AppData/Roaming/Mindustry/mods"
-            include "${project.archivesBaseName}Desktop.jar"
+            include "${project.archivesBaseName}.jar"
         }
         exec {
             commandLine 'java', '-jar', '"C:/Users/user/Desktop/MindustryX-2026.05.X35-Desktop.jar"'
