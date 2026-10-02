@@ -8,7 +8,7 @@ main: "oblivionengine.OblivionEngine"
 
 description: "[sky]Alpha OblivionEngine Ver:1.0.1"
 
-repo: "yourname/OblivionEngine"
+repo: "morning_glory/Oblivion_Engine"
 
 version: beta_0.1.1.95
 

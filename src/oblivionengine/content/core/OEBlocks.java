@@ -1,5 +1,6 @@
 package oblivionengine.content.core;
 
+import mindustry.world.blocks.defense.Wall;
 import oblivionengine.OECategory;
 import oblivionengine.expand.Blocks.*;
 import oblivionengine.expand.Payload.OEPayloadBlock;
@@ -34,10 +35,12 @@ public class OEBlocks {
     public static Block
             //炮台
             precursor,
+            //墙
+            titaniumAlloyWall,
             //工厂
             centrifuge,excavator,
             //矿石
-            UraniumOre,
+            UraniumOre,SulfurOre,
             //智能量子计算机
             IQC_980D,ICQ_380D,T1,
             //核心
@@ -45,9 +48,9 @@ public class OEBlocks {
             //地形
             icefloor,
             //载荷产物(方块实现方法)
-            stone_materiala,
+            stoneMateriala,
             //零件
-            crashing_wheel,
+            crashingWheel,
             //核心部件
             rockcrusher;
     public static @Nullable ItemStack outputItem;
@@ -132,6 +135,13 @@ public class OEBlocks {
             );
         }};
 
+        //墙
+        titaniumAlloyWall = new Wall("titanium-alloy-wall"){{
+            requirements(Category.defense, with(Items.titanium, 48));
+            size = 2;
+            health = 3800;
+        }};
+
         //工厂
         centrifuge = new Reconstructor("centrifuge"){{
             requirements(Category.units, with(Items.copper, 200, Items.lead, 120, Items.silicon, 90));
@@ -158,6 +168,12 @@ public class OEBlocks {
             oreDefault = true;
             oreThreshold = 0.882f;
             oreScale = 26.680953f;
+        }};
+
+        SulfurOre = new OreBlock(OEItems.Sulfur){{
+            oreDefault = true;
+            oreThreshold = 1f;
+            oreScale = 45;
         }};
 
         //智能量子计算机
@@ -189,7 +205,7 @@ public class OEBlocks {
         }};
 
         //载荷产物(方块实现方法)
-        stone_materiala = new OEPayloadBlock("stone-materiala"){{
+        stoneMateriala = new OEPayloadBlock("stone-materiala"){{
             requirements(OECategory.OBLIVION_SPECIAL, BuildVisibility.hidden,with(OEItems.Item, 1));
             size = 3;
             health = 512 * size;
@@ -197,7 +213,7 @@ public class OEBlocks {
         }};
 
         //parts
-        crashing_wheel = new OECrashingWheel("crashing-wheel"){{
+        crashingWheel = new OECrashingWheel("crashing-wheel"){{
             requirements(OECategory.parts, BuildVisibility.shown, with(Items.copper, 50, Items.lead, 120, Items.silicon, 80));
             size = 3;
         }};
@@ -211,6 +227,6 @@ public class OEBlocks {
         }};
 
         //add to specialBlocks category
-        OECategory.specialBlocks.add(crashing_wheel);
+        OECategory.specialBlocks.add(crashingWheel);
     }
 }

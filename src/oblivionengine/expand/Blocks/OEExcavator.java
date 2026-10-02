@@ -22,7 +22,7 @@ import mindustry.world.blocks.payloads.Payload;
 import mindustry.world.blocks.payloads.PayloadBlock;
 
 public class OEExcavator extends PayloadBlock {
-    private final Block TYPE = OEBlocks.stone_materiala;
+    private final Block TYPE = OEBlocks.stoneMateriala;
 
     public float produceTime = 7.517f;
 

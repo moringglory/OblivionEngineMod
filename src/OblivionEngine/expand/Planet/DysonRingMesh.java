@@ -1,4 +1,4 @@
-package oblivionengine.expand.map;
+package oblivionengine.expand.Planet;
 
 import arc.graphics.Color;
 import arc.graphics.Gl;

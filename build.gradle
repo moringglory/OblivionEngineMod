@@ -36,7 +36,7 @@ java {
 }
 
 ext {
-    mindustryVersion = "v158.1"
+    mindustryVersion = "v160"
     isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
 }
@@ -44,9 +44,6 @@ ext {
 dependencies {
     compileOnly mindustryVersion == "be" ? "Anuken:MindustryBuilds:latest" : "Anuken:Mindustry:$mindustryVersion"
     annotationProcessor mindustryVersion == "be" ? "Anuken:MindustryBuilds:latest" : "Anuken:Mindustry:$mindustryVersion"
-
-    compileOnly 'org.spongepowered:mixin:0.8.7'
-    annotationProcessor 'org.spongepowered:mixin:0.8.7:processor'
 }
 
 jar {

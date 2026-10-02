@@ -1,14 +1,17 @@
 package oblivionengine.expand.map;
 
 import arc.graphics.Color;
+import arc.graphics.gl.Shader;
 import arc.math.Mathf;
 import arc.math.geom.Vec3;
+import arc.util.Time;
 import arc.util.Tmp;
 import arc.util.noise.Simplex;
 import mindustry.content.Blocks;
 import mindustry.graphics.Shaders;
 import mindustry.graphics.g3d.HexMesh;
 import mindustry.graphics.g3d.HexMesher;
+import mindustry.graphics.g3d.ShaderSphereMesh;
 import mindustry.maps.generators.PlanetGenerator;
 import mindustry.type.Planet;
 import mindustry.world.Block;

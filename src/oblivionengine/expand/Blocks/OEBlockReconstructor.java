@@ -71,7 +71,7 @@ public class OEBlockReconstructor extends PayloadBlock {
         @Override
         public boolean acceptPayload(Building source, Payload payload) {
             if (this.payload != null) return false;
-            return payload.content() == OEBlocks.stone_materiala;
+            return payload.content() == OEBlocks.stoneMateriala;
         }
 
         @Override
@@ -85,7 +85,7 @@ public class OEBlockReconstructor extends PayloadBlock {
 
             progress = 121;//test
             if(payload != null) {
-                if(payload.content() != OEBlocks.stone_materiala) {
+                if(payload.content() != OEBlocks.stoneMateriala) {
                     moveOutPayload();
                 } else {
                     if(moveInPayload()) {
