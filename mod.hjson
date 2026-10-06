@@ -1,15 +1,17 @@
-displayName: "Oblivion_Engine"
+displayName: "Oblivion Engine"
 
-name: "OblivionEngine"
+name: "oblivion-engine"
 
-author: "awa"
+author: "Shiraelle"
 
 main: "oblivionengine.OblivionEngine"
 
-description: "[sky]Alpha OblivionEngine Ver:1.0.1"
+description: "[sky]Alpha oblivionengine Ver:1.0.1"
 
-version: 1.0.1
+repo: "moringglory/OblivionEngineMod"
 
-minGameVersion: 150
+version: beta_0.1.1.95
+
+minGameVersion: 157.1
 
 java: true
