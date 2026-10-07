@@ -1,6 +1,7 @@
 package oblivionengine.content;
 
 import mindustry.world.blocks.defense.Wall;
+import oblivionengine.OblivionEngine;
 import oblivionengine.expand.Blocks.*;
 import oblivionengine.expand.Payload.OEPayloadBlock;
 import arc.graphics.Color;
@@ -141,7 +142,7 @@ public class OEBlocks {
 
         //工厂
         centrifuge = new Reconstructor("centrifuge"){{
-            requirements(Category.units, with(Items.copper, 200, Items.lead, 120, Items.silicon, 90));
+            requirements(OECategory.oblivion_special, with(Items.copper, 200, Items.lead, 120, Items.silicon, 90));
 
             size = 3;
             consumePower(3f);
@@ -155,7 +156,7 @@ public class OEBlocks {
         }};
         excavator = new OEExcavator("excavator"){{
 //            Seq.with(stone_materiala,IQC_980D);
-            requirements(Category.units, with(Items.titanium, 150));
+            requirements(Category.crafting, with(Items.titanium, 150));
             health = 480 * size;
             buildTime = 400f;
         }};

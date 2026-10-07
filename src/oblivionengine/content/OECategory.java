@@ -5,8 +5,6 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 
-import static sun.misc.Unsafe.getUnsafe;
-
 public class OECategory {
     public static Category oblivion_special;
     public static Category parts;
@@ -36,5 +34,11 @@ public class OECategory {
             e.printStackTrace();
             return Category.units;
         }
+    }
+
+    private static Unsafe getUnsafe() throws Exception {
+        Field f = Unsafe.class.getDeclaredField("theUnsafe");
+        f.setAccessible(true);
+        return (Unsafe) f.get(null);
     }
 }
