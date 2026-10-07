@@ -9,29 +9,47 @@ public class OECategory {
     public static Category oblivion_special;
     public static Category parts;
 
+    private static final boolean IS_ANDROID;
+    private static final boolean IS_JAVA9_PLUS;
+
     static {
+        IS_ANDROID = checkClass("android.os.Build");
+        IS_JAVA9_PLUS = checkClass("java.lang.Module");
+
         oblivion_special = addHiddenCategory("oblivion-special", Category.production.ordinal());
         parts = addHiddenCategory("parts", Category.production.ordinal());
     }
 
-    private static Category addHiddenCategory(String name, int ordinal) {
+    private static boolean checkClass(String name) {
         try {
-            Class<Category> clazz = Category.class;
+            Class.forName(name);
+            return true;
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
+    private static Category addHiddenCategory(String name, int ordinal) {
+        if (IS_ANDROID) {
+            return Category.units;
+        }
+
+        try {
             Unsafe unsafe = getUnsafe();
 
-            Category newCategory = (Category) unsafe.allocateInstance(clazz);
+            Category newCategory = (Category) unsafe.allocateInstance(Category.class);
+            if (newCategory == null) {
+                return Category.units;
+            }
 
             Field nameField = Class.forName("java.lang.Enum").getDeclaredField("name");
-            long nameOffset = unsafe.objectFieldOffset(nameField);
-            unsafe.putObject(newCategory, nameOffset, name);
+            unsafe.putObject(newCategory, unsafe.objectFieldOffset(nameField), name);
 
             Field ordinalField = Class.forName("java.lang.Enum").getDeclaredField("ordinal");
-            long ordinalOffset = unsafe.objectFieldOffset(ordinalField);
-            unsafe.putInt(newCategory, ordinalOffset, ordinal);
+            unsafe.putInt(newCategory, unsafe.objectFieldOffset(ordinalField), ordinal);
 
             return newCategory;
         } catch (Throwable e) {
-            e.printStackTrace();
             return Category.units;
         }
     }
