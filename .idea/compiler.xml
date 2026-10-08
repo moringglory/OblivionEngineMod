@@ -5,7 +5,7 @@
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/Anuken/Mindustry/v160.5/cff2148777000ffca97f5ca3a88f79af51eb4c8f/Mindustry-v160.5.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/Anuken/Mindustry/v158/6241422c5d2cad9df2961aa993a6d0bdd342156/Mindustry-v158.jar" />
         </processorPath>
         <module name="OblivionEngineMod.main" />
       </profile>

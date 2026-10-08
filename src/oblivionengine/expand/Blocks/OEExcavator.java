@@ -57,6 +57,11 @@ public class OEExcavator extends PayloadBlock {
     }
 
     @Override
+    public void setStats() {
+        super.setStats();
+    }
+
+    @Override
     public void getPlanConfigs(Seq<UnlockableContent> options){
         options.add(TYPE);
     }

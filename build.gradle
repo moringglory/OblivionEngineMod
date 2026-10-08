@@ -36,7 +36,7 @@ java {
 }
 
 ext {
-    mindustryVersion = "v160.5"
+    mindustryVersion = "v158"
     isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
 }
@@ -104,10 +104,10 @@ tasks.register('runOnClient') {
     doLast {
         def appData = System.getenv("APPDATA")
         def modsDir = new File(appData, "Mindustry/mods")
-        def desktopJar = "${project.name}Desktop.jar"
+        def desktopJar = "${project.name}.jar"
         delete {
             delete new File(modsDir, desktopJar)
-            delete new File(modsDir, "${project.name}Desktop.zip")
+            delete new File(modsDir, "${project.name}.zip")
         }
         copy {
             from "$buildDir/libs"
@@ -115,7 +115,7 @@ tasks.register('runOnClient') {
             include desktopJar
         }
         exec {
-            commandLine 'java', '-jar', "C:/Users/${System.getProperty('user.name')}/Desktop/MindustryX-2026.05.X35-Desktop.jar"
+            commandLine 'java', '-jar', "C:/Users/${System.getProperty('user.name')}/Desktop/Mindustry 160.5.jar"
         }
     }
 }

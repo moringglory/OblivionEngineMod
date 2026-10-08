@@ -3,7 +3,7 @@ package oblivionengine.content;
 import mindustry.graphics.g3d.MeshBuilder;
 import mindustry.graphics.g3d.PlanetGrid;
 import oblivionengine.expand.Planet.AethelgardGalaxy;
-import oblivionengine.expand.map.OEPlanetTools;
+import oblivionengine.expand.Map.OEPlanetTools;
 import arc.graphics.Color;
 import arc.util.Time;
 import mindustry.content.Planets;
@@ -14,8 +14,6 @@ import mindustry.graphics.g3d.HexSkyMesh;
 import mindustry.graphics.g3d.MultiMesh;
 import mindustry.type.Planet;
 import oblivionengine.expand.Planet.DysonRingMesh;
-
-import static mindustry.entities.part.DrawPart.params;
 
 public class OEPlanets {
     public static Planet tome,aethelgard,profundity,frostcinder,CHAT_2c,distant;

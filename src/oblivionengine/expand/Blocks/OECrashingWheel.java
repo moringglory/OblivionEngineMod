@@ -72,7 +72,7 @@ public class OECrashingWheel extends OEParts {
                             }
                         }
                     }
-                    if(errTile != null && errTile.block() == OEBlocks.rockcrusher) errTile = null;
+                    if(errTile != null && (errTile.block() == OEBlocks.rockcrusher || errTile.block() == OEBlocks.crashingWheel)) errTile = null;
                     if(!canPlace) continue;
                     if (canPlace && tile.build.tileX() == tx + dx[i] && tile.build.tileY() == ty + dy[i] && tile.build.block == OEBlocks.crashingWheel) {
                         placed = true;

@@ -3,6 +3,7 @@ package oblivionengine.content;
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.style.Drawable;
 import arc.scene.style.TextureRegionDrawable;
+import mindustry.core.UI;
 import mindustry.type.Category;
 import arc.ApplicationListener;
 import arc.Core;
@@ -33,10 +34,12 @@ import mindustry.gen.Icon;
 import mindustry.graphics.Pal;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
+import mindustry.ui.dialogs.PlanetDialog;
+import mindustry.ui.dialogs.ResearchDialog;
 import mindustry.ui.fragments.MenuFragment;
 import mindustry.ui.fragments.PlacementFragment;
-import oblivionengine.expand.ui.OBJRenderer;
-import oblivionengine.expand.ui.OEUITools;
+import oblivionengine.expand.UI.OBJRenderer;
+import oblivionengine.expand.UI.OEUITools;
 
 import java.lang.reflect.Field;
 
@@ -56,7 +59,7 @@ public class OEDialog {
 //            table.sliderPref("oe-particles", 50, 0, 100, 5, i -> i + "%");
 //            table.textPref("oe-server", "127.0.0.1");
         });
-//        ui.settings.buttons.button("@oblivine-engine.OEDebugPanelDialog", Icon.settings, () -> {OEUI.debugpanel.show();});
+//        UI.settings.buttons.button("@oblivine-engine.OEDebugPanelDialog", Icon.settings, () -> {OEUI.debugpanel.show();});
     }
 
     public static class OEUI implements ApplicationListener {
@@ -67,10 +70,60 @@ public class OEDialog {
         public static BaseDialog debugpanel = new OEDebugPanelDialog();
         boolean added;
 
+        public static class OEPlanetDialog extends PlanetDialog {
+            public OEPlanetDialog() {
+                super();
+            }
+        }
+
+        public static class OEResearchDialog extends ResearchDialog {
+            public OEResearchDialog() {
+                super();
+            }
+            @Override
+            public BaseDialog show() {
+                // 加一句提示验证替换成功
+                Core.app.post(() -> Vars.ui.announce("[accent]OE 科技树"));
+                return (BaseDialog) super.show();
+            }
+        }
+
         private static void addOEUI() {
             Events.on(EventType.ClientLoadEvent.class, e -> {
+                removeTechButton();
                 if (ui.menufrag == null || ui.menufrag.desktopButtons == null) return;
-
+//                for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
+//                    if (button != null && "@play".equals(button.text) && button.submenu != null) {
+//                        Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();
+//
+//                        for (MenuFragment.MenuButton subButton : button.submenu) {
+//                            newSubmenu.add(subButton);
+//                        }
+//
+//                        newSubmenu.add(new MenuFragment.MenuButton(
+//                                "@oe.planet",
+//                                Icon.planet,
+//                                () -> {
+//                                    if (!mods.hasContentErrors()) {
+//                                        new OEPlanetDialog().show();
+//                                    } else {
+//                                        Vars.ui.showInfo("@mod.noerrorplay");
+//                                    }
+//                                }
+//                        ));
+//
+//                        MenuFragment.MenuButton newPlayButton = new MenuFragment.MenuButton(
+//                                "@play",
+//                                Icon.play,
+//                                () -> {
+//                                },
+//                                newSubmenu.toArray(MenuFragment.MenuButton.class)
+//                        );
+//                        int index = ui.menufrag.desktopButtons.indexOf(button);
+//                        ui.menufrag.desktopButtons.set(index, newPlayButton);
+//                        break;
+//                    }
+//                }
                 for (MenuFragment.MenuButton button : ui.menufrag.desktopButtons) {
                     if (button != null && "@database.button".equals(button.text) && button.submenu != null) {
                         Seq<MenuFragment.MenuButton> newSubmenu = new Seq<>();
@@ -322,12 +375,53 @@ public class OEDialog {
                     added = false;
                 });
                 if (!added) {
-                    ui.planet.buttons.button("@planet.preview", Icon.fileText, () -> {
-                        exportOverview.show();
-                    }).size(200f, 54f).pad(2).visible(() -> ui.planet.mode == look).bottom();
+                    removeTechButton();
+                    addPreviewButton();
+                    addTechButton();
                     added = true;
                 }
             }
+        }
+
+        private static void removeTechButton() {
+            Table buttons = ui.planet.buttons;
+            if (buttons == null) return;
+
+            Seq<Element> toRemove = new Seq<>();
+            for (Element e : buttons.getChildren()) {
+                if (e instanceof Button b) {
+                    for (Element child : b.getChildren()) {
+                        if (child instanceof Label l) {
+                            String text = l.getText().toString();
+                            if ("@techtree".equals(text) || "科技树".equals(text) || "Tech Tree".equals(text)) {
+                                toRemove.add(e);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            for (Element e : toRemove) {
+                e.remove();
+            }
+        }
+
+        private static void addPreviewButton() {
+            Table buttons = ui.planet.buttons;
+            if (buttons == null) return;
+
+            buttons.button("@planet.preview", Icon.fileText, () -> {
+                exportOverview.show();
+            }).size(200f, 54f).pad(2).visible(() -> ui.planet.mode == look).bottom();
+        }
+
+        private static void addTechButton() {
+            Table buttons = ui.planet.buttons;
+            if (buttons == null) return;
+
+            buttons.button("@techtree", Icon.fileText, () -> {
+                debugpanel.show();
+            }).size(200f, 54f).pad(2).visible(() -> ui.planet.mode == look).bottom();
         }
     }
 

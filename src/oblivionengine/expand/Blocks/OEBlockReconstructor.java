@@ -38,7 +38,6 @@ public class OEBlockReconstructor extends PayloadBlock {
     }
 
     public class OEBlockReconstructorBuild extends PayloadBlockBuild {
-        public float progress, time;
         boolean vertical = false;
         private int lastRot = -1;
 
@@ -64,38 +63,6 @@ public class OEBlockReconstructor extends PayloadBlock {
         public boolean acceptPayload(Building source, Payload payload) {
             if (this.payload != null) return false;
             return payload.content() == OEBlocks.stoneMateriala;
-        }
-
-        @Override
-        public void handlePayload(Building source, Payload payload) {
-            this.payload = payload;
-        }
-
-        @Override
-        public void updateTile() {
-            super.updateTile();
-
-            progress = 121;//test
-            if(payload != null) {
-                if(payload.content() != OEBlocks.stoneMateriala) {
-                    moveOutPayload();
-                } else {
-                    if(moveInPayload()) {
-                        if(efficiency > 0){
-//                            Events.fire(new EventType.UnitCreateEvent(payload., this));
-                        }
-                        if(progress >= constructTime){
-                            payload = null;
-                            payload = new UnitPayload(OEUnits.depleted_uranium.create(team));
-                            createSound.at(this, 1f + Mathf.range(0.06f), createSoundVolume);
-                            progress %= 1f;
-                            Effect.shake(2f, 3f, this);
-                            Fx.producesmoke.at(this);
-                            consume();
-                        }
-                    }
-                }
-            }
         }
     }
 }

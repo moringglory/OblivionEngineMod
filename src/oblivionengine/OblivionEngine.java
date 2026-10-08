@@ -9,7 +9,7 @@ import mindustry.mod.Mod;
 import mindustry.ui.dialogs.BaseDialog;
 
 import oblivionengine.content.*;
-import oblivionengine.expand.ui.OEUITools;
+import oblivionengine.expand.UI.OEUITools;
 
 public class OblivionEngine extends Mod {
     public static final String MOD_NAME = "oblivion-engine";
